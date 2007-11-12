@@ -2,7 +2,7 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.3.3
+Version:        0.4.0
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -15,13 +15,18 @@ BuildArch:      noarch
 BuildRequires: python-setuptools-devel TurboGears
 
 %description
-Bodhi is a modular frameworkthat facilitates the process of publishing
+Bodhi is a modular framework that facilitates the process of publishing
 updates for a software distribution.
+
+A modular piece of the Fedora Infrastructure stack
+* Utilizes the Koji Buildsystem for tracking RPMs
+* Creates the update repositories using Mash, which composes a repository based
+  on tagged builds in Koji. 
 
 %package client
 Summary: Bodhi Client
 Group: Applications/Internet
-Requires: python-simplejson python-fedora
+Requires: python-simplejson python-fedora koji yum
 
 %description client 
 Client tools for interacting with bodhi
@@ -42,7 +47,6 @@ updates for a software distribution.
 %setup -q
 rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
-
 %build
 %{__python} setup.py build --install-conf=%{_sysconfdir} \
         --install-data=%{_datadir}
@@ -51,8 +55,8 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install --skip-build --install-conf=%{_sysconfdir} \
     --install-data=%{_datadir} --root %{buildroot}
-%{__install} -D bodhi/tools/bodhi-client.py $RPM_BUILD_ROOT/usr/bin/bodhi
-chmod +x $RPM_BUILD_ROOT/%{_datadir}/%{name}/bodhi/tools/{bodhi-client,init,dev_init,pickledb}.py
+%{__install} -D bodhi/tools/bodhi_client.py $RPM_BUILD_ROOT/usr/bin/bodhi
+chmod +x $RPM_BUILD_ROOT/%{_datadir}/%{name}/bodhi/tools/{bodhi_client,init,dev_init,pickledb}.py
 
 
 %clean
@@ -72,6 +76,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Nov 11 2007 Luke Macken <lmacken@redhat.com> - 0.4.0-1
+- Lots of bodhi-client features
+
 * Wed Nov  7 2007 Luke Macken <lmacken@redhat.com> - 0.3.3-1
 - 0.3.3
 
