@@ -3,12 +3,13 @@
 
 Name:           bodhi
 Version:        0.4.10
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
 URL:            https://hosted.fedoraproject.org/projects/bodhi
 Source0:        bodhi-%{version}.tar.bz2
+Patch0:         bodhi-%{version}-python-fedora-0.3.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
@@ -44,6 +45,7 @@ updates for a software distribution.
 
 %prep
 %setup -q
+%patch0 -b .python-fedora-0.3
 rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 %build
@@ -76,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 01 2008 Luke Macken <lmacken@redhat.com> - 0.4.10-4
+- Add a patch to fix the bodhi client for python-fedora 0.3 API changes
+
 * Tue Feb 26 2008 Luke Macken <lmacken@redhat.com> - 0.4.10-3
 - Add python-bugzilla to our server requirements
 
