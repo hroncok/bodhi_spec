@@ -2,21 +2,23 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.4.10
-Release:        4%{?dist}
+Version:        0.5.0
+Release:        7%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
-URL:            https://hosted.fedoraproject.org/projects/bodhi
+URL:            https://fedorahosted.org/bodhi
 Source0:        bodhi-%{version}.tar.bz2
-Patch0:         bodhi-%{version}-python-fedora-0.3.patch
+
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
-BuildRequires: python-setuptools-devel TurboGears python-genshi python-elixir
+BuildRequires: python-setuptools-devel
+BuildRequires: python-devel
+BuildRequires: TurboGears
 
 %description
-Bodhi is a modular framework that facilitates the process of publishing
+Bodhi is a web application that facilitates the process of publishing
 updates for a software distribution.
 
 A modular piece of the Fedora Infrastructure stack
@@ -24,20 +26,34 @@ A modular piece of the Fedora Infrastructure stack
 * Creates the update repositories using Mash, which composes a repository based
   on tagged builds in Koji. 
 
+
 %package client
 Summary: Bodhi Client
 Group: Applications/Internet
 Requires: python-simplejson python-fedora koji yum
 
-%description client 
+%description client
 Client tools for interacting with bodhi
 
 
 %package server
 Summary: A modular framework that facilitates publishing software updates
 Group: Applications/Internet
-Requires: TurboGears createrepo python-TurboMail intltool mash cvs python-fedora
+Requires: TurboGears
+Requires: python-TurboMail
+Requires: intltool
+Requires: mash
+Requires: cvs
+Requires: koji
+Requires: python-fedora
 Requires: python-bugzilla
+Requires: python-imaging
+Requires: python-crypto
+Requires: python-turboflot
+Requires: python-tgcaptcha
+Requires: python-decorator
+Requires: mod_wsgi
+
 
 %description server
 Bodhi is a modular framework that facilitates the process of publishing
@@ -45,31 +61,44 @@ updates for a software distribution.
 
 %prep
 %setup -q
-%patch0 -b .python-fedora-0.3
 rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 %build
-%{__python} setup.py build --install-conf=%{_sysconfdir} \
-        --install-data=%{_datadir}
+%{__python} setup.py build --install-data=%{_datadir}
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install --skip-build --install-conf=%{_sysconfdir} \
+%{__rm} -rf %{buildroot}
+%{__python} setup.py install -O1 --skip-build \
     --install-data=%{_datadir} --root %{buildroot}
-%{__install} -D bodhi/tools/bodhi_client.py $RPM_BUILD_ROOT/usr/bin/bodhi
-chmod +x $RPM_BUILD_ROOT/%{_datadir}/%{name}/bodhi/tools/{bodhi_client,init,dev_init,pickledb}.py
+
+%{__mkdir_p} %{buildroot}/var/lib/bodhi
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/httpd/conf.d
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/bodhi
+%{__mkdir_p} %{buildroot}%{_datadir}/%{name}
+%{__mkdir_p} -m 0755 %{buildroot}/%{_localstatedir}/log/bodhi
+
+%{__install} -m 640 apache/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
+%{__install} -m 640 %{name}.cfg %{buildroot}%{_sysconfdir}/%{name}/
+%{__install} -m 640 %{name}/config/*mash* %{buildroot}%{_sysconfdir}/%{name}/
+%{__install} apache/%{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 
 
 %files server
 %defattr(-,root,root,-)
 %doc README COPYING
-%{_datadir}/%{name}
-%{_bindir}/start-bodhi
-%config(noreplace) %{_sysconfdir}/%{name}.cfg
+%{python_sitelib}/%{name}/
+%{_bindir}/start-%{name}
+%{_bindir}/%{name}-*
+%{python_sitelib}/%{name}-%{version}-py%{pyver}.egg-info/
+%{_sysconfdir}/httpd/conf.d/bodhi.conf
+%attr(-,apache,root) %{_datadir}/%{name}
+%attr(-,apache,root) %config(noreplace) %{_sysconfdir}/bodhi/*
+%attr(-,apache,root) %{_localstatedir}/log/bodhi
+
 
 %files client
 %doc COPYING README
@@ -78,8 +107,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Fri Aug 01 2008 Luke Macken <lmacken@redhat.com> - 0.4.10-4
-- Add a patch to fix the bodhi client for python-fedora 0.3 API changes
+* Sun Jul 06 2008 Luke Macken <lmacken@redhat.com> - 0.5.0-7
+- Latest upstream release
+
+* Thu Jun 12 2008 Todd Zullinger <tmz@pobox.com> - 0.4.10-5
+- update URL to point to fedorahosted.org
+
+* Fri Apr 04 2008 Luke Macken <lmacken@redhat.com> - 0.4.10-4
+- Add python-tgcaptcha to our server requirements
 
 * Tue Feb 26 2008 Luke Macken <lmacken@redhat.com> - 0.4.10-3
 - Add python-bugzilla to our server requirements
