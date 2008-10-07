@@ -2,7 +2,7 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.5.3
+Version:        0.5.5
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -33,7 +33,8 @@ A modular piece of the Fedora Infrastructure stack
 %package client
 Summary: Bodhi Client
 Group: Applications/Internet
-Requires: python-simplejson python-fedora koji yum
+Requires: python-simplejson koji yum
+Requires: python-fedora >= 0.3.5
 
 %description client
 Client tools for interacting with bodhi
@@ -111,6 +112,16 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Mon Oct 06 2008 Luke Macken <lmacken@redhat.com> - 0.5.5-1
+- Latest upstream release.
+
+* Sat Oct 04 2008 Luke Macken <lmacken@redhat.com> - 0.5.4-2
+- Make our masher extension point less obtrusive.
+
+* Tue Sep 16 2008 Luke Macken <lmacken@redhat.com> - 0.5.4-1
+- Latest upstream release, containing various bugfixes
+- Make our python-fedora requirement explicit (#461518)
+
 * Wed Sep 10 2008 Luke Macken <lmacken@redhat.com> - 0.5.3-1
 - Latest upstream release
 
