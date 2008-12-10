@@ -2,8 +2,8 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.5.5
-Release:        2%{?dist}
+Version:        0.5.13
+Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -107,13 +107,41 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %files client
+%defattr(-,root,root,-)
 %{_bindir}/bodhi
 %{_mandir}/man1/bodhi.1.gz
 
 
 %changelog
-* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.5.5-2
-- Rebuild for Python 2.6
+* Wed Dec 10 2008 Luke Macken <lmacken@redhat.com> - 0.5.13-1
+- Latest upstream release to fix various metrics/rss issues
+
+* Mon Nov 24 2008 Luke Macken <lmacken@redhat.com> - 0.5.12-1
+- Latest upstream release, to fix the 10k bug
+
+* Fri Nov 21 2008 Luke Macken <lmacken@redhat.com> - 0.5.11-1
+- Various F10 release tweaks
+
+* Fri Oct 24 2008 Luke Macken <lmacken@redhat.com> - 0.5.10-3
+- Latest upstream release
+
+* Wed Oct 15 2008 Luke Macken <lmacken@redhat.com> - 0.5.9-2
+- Fix a trivial module import issue
+
+* Tue Oct 14 2008 Luke Macken <lmacken@redhat.com> - 0.5.9-1
+- Fix a variety of bugs, including a race-condition when editing.
+
+* Thu Oct 13 2008 Steve 'Ashcrow' Milner <smilner@redhat.com> - 0.5.8-2
+- Added default attributes to client files.
+
+* Sun Oct 12 2008 Luke Macken <lmacken@redhat.com> - 0.5.8-1
+- Minor release to fix some new update creation bugs
+
+* Thu Oct 09 2008 Luke Macken <lmacken@redhat.com> - 0.5.7-1
+- Latest release, containing some API improvements
+
+* Tue Oct 07 2008 Luke Macken <lmacken@redhat.com> - 0.5.6-1
+- Latest upstream release.
 
 * Mon Oct 06 2008 Luke Macken <lmacken@redhat.com> - 0.5.5-1
 - Latest upstream release.
