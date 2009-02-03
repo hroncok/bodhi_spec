@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.5.17
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -100,6 +100,7 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 %{_bindir}/start-%{name}
 %{_bindir}/%{name}-*
 %{_sysconfdir}/httpd/conf.d/bodhi.conf
+%dir %{_sysconfdir}/bodhi/
 %attr(-,apache,root) %{_datadir}/%{name}
 %attr(-,apache,root) %config(noreplace) %{_sysconfdir}/bodhi/*
 %attr(-,apache,root) %{_localstatedir}/log/bodhi
@@ -113,6 +114,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Mon Feb 2 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.5.17-2
+- Own the %%{_sysconfdir}/bodhi directory.
+
 * Thu Jan 22 2009 Luke Macken <lmacken@redhat.com> - 0.5.17-1
 - Latest upstream bugfix release.
 
