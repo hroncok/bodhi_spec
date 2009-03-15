@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.5.17
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -57,6 +57,7 @@ Requires: python-turboflot
 Requires: python-tgcaptcha
 Requires: python-decorator
 Requires: mod_wsgi
+Requires: httpd
 
 
 %description server
@@ -114,6 +115,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Sat Mar 14 2009 Luke Macken <lmacken@redhat.com> - 0.5.17-4
+- Require httpd
+
 * Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.17-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
