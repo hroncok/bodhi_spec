@@ -2,7 +2,7 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.5.19
+Version:        0.5.27
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -115,14 +115,50 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
-* Mon Apr 06 2009 Luke Macken <lmacken@redhat.com> - 0.5.19-1
+* Mon Jun 22 2009 Luke Macken <lmacken@redhat.com> - 0.5.27-01
+- Latest upstream release to bring in fixed mash config files.
+
+* Fri Jun 12 2009 Luke Macken <lmacken@redhat.com> - 0.5.26-1
+- Latest upstream release with a variety of fixes and pkgdb-0.4 support.
+
+* Tue May 12 2009 Luke Macken <lmacken@redhat.com> - 0.5.25-1
+- Latest upstream bugfix release to work around some TG 1.0.8
+  brokenness, and make our masher a bit more robust.
+
+* Tue May 12 2009 Luke Macken <lmacken@redhat.com> - 0.5.24-1
+- 0.5.24 bugfix release
+
+* Thu May 07 2009 Luke Macken <lmacken@redhat.com> - 0.5.23-1
+- Add mash configs for F11, with deltarpm support.
+
+* Thu Apr 30 2009 Luke Macken <lmacken@redhat.com> - 0.5.22-1
+- Remove pagination patch, as Fedora Infrastructure is now TG 1.0.8
+
+* Thu Apr 30 2009 Luke Macken <lmacken@redhat.com> - 0.5.21-1
+- Update to TG 1.0.8 API (fixes a @paginate issue)
+
+* Mon Apr 06 2009 Luke Macken <lmacken@redhat.com> - 0.5.20-1
+- Fix a bug when sending mash requests through the ProxyClient
+- More Python2.4 workarounds
+
+* Mon Apr 06 2009 Luke Macken <lmacken@redhat.com> - 0.5.19-3
+- Update to work with Python2.4
+
+* Mon Apr 06 2009 Luke Macken <lmacken@redhat.com> - 0.5.19-2
+- Revision bump to bring it up to speed with the fedora infra package
+
+* Sat Mar 21 2009 Luke Macken <lmacken@redhat.com> - 0.5.19-1
 - 0.5.19
+- Add a patch to get pagination working in TG 1.0.4.4
 
 * Sat Mar 14 2009 Luke Macken <lmacken@redhat.com> - 0.5.17-4
 - Require httpd
 
 * Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.5.17-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
+* Tue Feb 10 2009 Luke Macken <lmacken@redhat.com> - 0.5.18-1
+- Bugfix release, and to stop using deprecated python-fedora APIs.
 
 * Mon Feb 2 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.5.17-2
 - Own the %%{_sysconfdir}/bodhi directory.
