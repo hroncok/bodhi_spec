@@ -2,8 +2,8 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.6.1
-Release:        2%{?dist}
+Version:        0.7.0
+Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -58,6 +58,7 @@ Requires: python-tgcaptcha
 Requires: python-decorator
 Requires: mod_wsgi
 Requires: httpd
+Requires: python-markdown2
 
 
 %description server
@@ -115,8 +116,46 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
-* Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+* Mon Jan 18 2010 Luke Macken <lmacken@redhat.com> - 0.7.0-1
+- 0.7.0 release, prepping for the F13 release
+- Critical Path & No Frozen Rawhide proposals implemented
+- Many other bugfixes, enhancements, and optimizations
+
+* Fri Nov 06 2009 Luke Macken <lmacken@redhat.com> - 0.6.12-1
+- 0.6.12, for F12
+
+* Sat Sep 19 2009 Luke Macken <lmacken@redhat.com> - 0.6.11-1
+- 0.6.11
+
+* Fri Sep 18 2009 Luke Macken <lmacken@redhat.com> - 0.6.10-1
+- 0.6.10
+
+* Thu Sep 17 2009 Luke Macken <lmacken@redhat.com> - 0.6.9-2
+- More CSRF tweaks
+
+* Thu Sep 17 2009 Luke Macken <lmacken@redhat.com> - 0.6.9-1
+- 0.6.9
+
+* Mon Sep 14 2009 Luke Macken <lmacken@redhat.com> - 0.6.8-1
+- 0.6.8
+
+* Wed Sep 09 2009 Luke Macken <lmacken@redhat.com> - 0.6.7-1
+- 0.6.7
+
+* Wed Sep 09 2009 Luke Macken <lmacken@redhat.com> - 0.6.6-1
+- 0.6.6
+
+* Wed Sep 09 2009 Luke Macken <lmacken@redhat.com> - 0.6.5-1
+- 0.6.5
+
+* Fri Aug 14 2009 Luke Macken <lmacken@redhat.com> - 0.6.4-1
+- 0.6.4
+
+* Thu Aug 13 2009 Luke Macken <lmacken@redhat.com> - 0.6.3-1
+- 0.6.3
+
+* Fri Jul 10 2009 Luke Macken <lmacken@redhat.com> - 0.6.2-1
+- 0.6.2
 
 * Thu Jul 09 2009 Luke Macken <lmacken@redhat.com> - 0.6.1-1
 - 0.6.1
