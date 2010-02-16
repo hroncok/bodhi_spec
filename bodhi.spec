@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.7.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -116,6 +116,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Tue Feb 16 2010 Luke Macken <lmacken@redhat.com> - 0.7.0-2
+- Add the F13 updates-testing mash configuration
+
 * Mon Jan 18 2010 Luke Macken <lmacken@redhat.com> - 0.7.0-1
 - 0.7.0 release, prepping for the F13 release
 - Critical Path & No Frozen Rawhide proposals implemented
