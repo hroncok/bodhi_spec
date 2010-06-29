@@ -2,7 +2,7 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.7.4
+Version:        0.7.5
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -58,7 +58,7 @@ Requires: python-tgcaptcha
 Requires: python-decorator
 Requires: mod_wsgi
 Requires: httpd
-Requires: python-markdown2
+Requires: python-markdown
 
 
 %description server
@@ -116,6 +116,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Tue Jun 29 2010 Luke Macken <lmacken@redhat.com> - 0.7.5-1
+- 0.7.5 release
+
 * Thu Mar 04 2010 Luke Macken <lmacken@redhat.com> - 0.7.4-1
 - 0.7.4
 
