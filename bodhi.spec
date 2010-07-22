@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.7.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -116,6 +116,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.7.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Tue Jun 29 2010 Luke Macken <lmacken@redhat.com> - 0.7.5-1
 - 0.7.5 release
 
