@@ -1,14 +1,15 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-%{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
 Version:        0.7.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
 URL:            https://fedorahosted.org/bodhi
 Source0:        bodhi-%{version}.tar.bz2
+Patch0: bodhi-temp-client-only.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
@@ -17,8 +18,12 @@ BuildRequires: python-setuptools
 BuildRequires: python-setuptools-devel
 BuildRequires: python-devel
 
-BuildRequires: TurboGears python-bugzilla
-BuildRequires: python-fedora python-TurboMail TurboGears yum koji
+# Disable the following until they are built for python-2.7
+#BuildRequires: TurboGears
+#BuildRequires: python-TurboMail
+BuildRequires: python-bugzilla
+BuildRequires: python-fedora
+BuildRequires: yum koji
 
 %description
 Bodhi is a web application that facilitates the process of publishing
@@ -67,6 +72,7 @@ updates for a software distribution.
 
 %prep
 %setup -q
+%patch0 -p1 -b .temporary
 rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 %build
@@ -74,7 +80,7 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 %install
 %{__rm} -rf %{buildroot}
-%{__python} setup.py install -O1 --skip-build \
+%{__python} setup.py install --skip-build \
     --install-data=%{_datadir} --root %{buildroot}
 
 %{__mkdir_p} %{buildroot}/var/lib/bodhi
@@ -116,6 +122,11 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Tue Jul 27 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7.5-3
+- Disable Requirements that are necessary for operation of hte server.  This is
+  a temporary change to get the package building on python-2.7.  Need to revert
+  this once the TG stack is rebuilt
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.7.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
