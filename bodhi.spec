@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.7.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -122,6 +122,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Sat Jul 31 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7.5-4
+- A little strange, the tarball changed on us....
+
 * Tue Jul 27 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7.5-3
 - Disable Requirements that are necessary for operation of hte server.  This is
   a temporary change to get the package building on python-2.7.  Need to revert
