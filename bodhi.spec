@@ -3,13 +3,12 @@
 
 Name:           bodhi
 Version:        0.7.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
 URL:            https://fedorahosted.org/bodhi
 Source0:        bodhi-%{version}.tar.bz2
-Patch0: bodhi-temp-client-only.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
@@ -17,10 +16,8 @@ BuildArch:      noarch
 BuildRequires: python-setuptools 
 BuildRequires: python-setuptools-devel
 BuildRequires: python-devel
-
-# Disable the following until they are built for python-2.7
-#BuildRequires: TurboGears
-#BuildRequires: python-TurboMail
+BuildRequires: TurboGears
+BuildRequires: python-TurboMail
 BuildRequires: python-bugzilla
 BuildRequires: python-fedora
 BuildRequires: yum koji
@@ -72,7 +69,7 @@ updates for a software distribution.
 
 %prep
 %setup -q
-%patch0 -p1 -b .temporary
+
 rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 %build
@@ -122,6 +119,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Wed Aug 04 2010 Orcan Ogetbil <oget[dot]fedora[at]gmail[dot]com> - 0.7.7-2
+- Reenable the TurboGears bits
+
 * Tue Aug 03 2010 Luke Macken <lmacken@redhat.com> - 0.7.7-1
 - 0.7.7 release
 
