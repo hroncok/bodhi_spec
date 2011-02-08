@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.7.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -121,6 +121,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.10-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Mon Jan 10 2011 Luke Macken <lmacken@redhat.com> - 0.7.10-1
 - 0.7.10 release
 
