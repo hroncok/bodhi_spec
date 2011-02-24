@@ -2,8 +2,8 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.7.10
-Release:        2%{?dist}
+Version:        0.7.11
+Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -121,6 +121,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Thu Feb 24 2011 Luke Macken <lmacken@redhat.com> - 0.7.11-1
+- Update to 0.7.11
+
 * Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
