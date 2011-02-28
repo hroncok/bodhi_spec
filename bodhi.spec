@@ -2,7 +2,7 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.7.11
+Version:        0.7.12
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -121,6 +121,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Mon Feb 28 2011 Luke Macken <lmacken@redhat.com> - 0.7.12-1
+- Update to 0.7.12
+
 * Thu Feb 24 2011 Luke Macken <lmacken@redhat.com> - 0.7.11-1
 - Update to 0.7.11
 
