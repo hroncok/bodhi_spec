@@ -2,7 +2,7 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.8.0
+Version:        0.8.3
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -13,7 +13,7 @@ Source0:        bodhi-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
-BuildRequires: python-setuptools 
+BuildRequires: python-setuptools
 BuildRequires: python-setuptools-devel
 BuildRequires: python-devel
 BuildRequires: TurboGears
@@ -21,6 +21,8 @@ BuildRequires: python-TurboMail
 BuildRequires: python-bugzilla
 BuildRequires: python-fedora
 BuildRequires: yum koji
+BuildRequires: python-tgcaptcha
+BuildRequires: python-turboflot
 
 %description
 Bodhi is a web application that facilitates the process of publishing
@@ -52,7 +54,6 @@ Requires: intltool
 Requires: mash
 Requires: cvs
 Requires: koji
-Requires: python-fedora
 Requires: python-bugzilla
 Requires: python-imaging
 Requires: python-crypto
@@ -63,6 +64,8 @@ Requires: mod_wsgi
 Requires: httpd
 Requires: python-markdown
 Requires: python-kitchen
+Requires: python-fedora
+Requires: python-fedora-turbogears
 
 
 %description server
@@ -121,6 +124,13 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Mon Oct 24 2011 Luke Macken <lmacken@redhat.com> - 0.8.3-1
+- Update to 0.8.3
+
+* Fri Aug 12 2011 Luke Macken <lmacken@redhat.com> - 0.8.1-1
+- Update our build requirements to make the test suite happy.
+- Pull in the new python-fedora-turbogears subpackage
+
 * Thu Jun 09 2011 Luke Macken <lmacken@redhat.com> - 0.8.0-1
 - Update to 0.8.0
 
