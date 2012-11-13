@@ -2,7 +2,7 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.9.2
+Version:        0.9.3
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -21,7 +21,7 @@ BuildRequires: python-TurboMail
 BuildRequires: python-bugzilla
 BuildRequires: python-fedora
 BuildRequires: yum koji
-BuildRequires: python-tgcaptcha
+BuildRequires: python-tgcaptcha2
 BuildRequires: python-turboflot
 
 %description
@@ -58,16 +58,18 @@ Requires: python-bugzilla
 Requires: python-imaging
 Requires: python-crypto
 Requires: python-turboflot
-Requires: python-tgcaptcha
+Requires: python-tgcaptcha2
 Requires: python-decorator
 Requires: mod_wsgi
 Requires: httpd
 Requires: python-markdown
 Requires: python-kitchen
 Requires: python-simplemediawiki
-Requires: fedmsg
 Requires: python-fedora
 Requires: python-fedora-turbogears
+
+# 0.3.3+ for thread safety
+Requires: fedmsg >= 0.3.3
 
 
 %description server
@@ -131,6 +133,12 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Tue Nov 13 2012 Luke Macken <lmacken@redhat.com> - 0.9.3-1
+- 0.9.3 bugfix release
+
+* Wed Aug 08 2012 Luke Macken <lmacken@redhat.com> - 0.9.2-2
+- Require python-tgcaptcha2
+
 * Sat Aug 04 2012 Luke Macken <lmacken@redhat.com> - 0.9.2-1
 - 0.9.2 bugfix release
 
