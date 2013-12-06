@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.9.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -14,7 +14,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
 BuildRequires: python-setuptools
-BuildRequires: python-setuptools-devel
+BuildRequires: python-setuptools
 BuildRequires: python-devel
 BuildRequires: TurboGears
 BuildRequires: python-TurboMail
@@ -133,6 +133,10 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Fri Dec 06 2013 Pierre-Yves Chibon <pingou@pingoured>fr - 0.9.7-2
+- Change BR from python-setuptools-devel to python-setuptools
+  See https://fedoraproject.org/wiki/Changes/Remove_Python-setuptools-devel
+
 * Tue Sep 10 2013 Luke Macken <lmacken@redhat.com> - 0.9.7-1
 - Update to 0.9.7
 
