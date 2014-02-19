@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.9.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -37,7 +37,7 @@ A modular piece of the Fedora Infrastructure stack
 %package client
 Summary: Bodhi Client
 Group: Applications/Internet
-Requires: python-simplejson koji yum
+Requires: koji yum
 Requires: python-fedora >= 0.3.5
 Requires: python-kitchen
 
@@ -133,6 +133,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Wed Feb 19 2014 Luke Macken <lmacken@redhat.com> - 0.9.8-2
+- Remove the python-simplejson requirement (#1060234)
+
 * Tue Feb 11 2014 Luke Macken <lmacken@redhat.com> - 0.9.8-1
 - Update to 0.9.8
 
