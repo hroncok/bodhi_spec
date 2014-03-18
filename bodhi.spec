@@ -3,12 +3,12 @@
 
 Name:           bodhi
 Version:        0.9.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
 URL:            https://fedorahosted.org/bodhi
-Source0:        bodhi-%{version}.tar.bz2
+Source0:        https://fedorahosted.org/releases/b/o/bodhi/bodhi-%{version}.tar.bz2
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
@@ -133,6 +133,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Tue Mar 18 2014 Luke Macken <lmacken@redhat.com> - 0.9.9-2
+- Fix the Source URL (#985058)
+
 * Fri Mar 14 2014 Luke Macken <lmacken@redhat.com> - 0.9.9-1
 - Update to 0.9.9
 
