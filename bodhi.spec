@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.9.8
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -13,16 +13,9 @@ Source0:        bodhi-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
-BuildRequires: python-setuptools
-BuildRequires: python-setuptools
 BuildRequires: python-devel
-BuildRequires: TurboGears
-BuildRequires: python-TurboMail
-BuildRequires: python-bugzilla
 BuildRequires: python-fedora
 BuildRequires: yum koji
-BuildRequires: python-tgcaptcha2
-BuildRequires: python-turboflot
 
 %description
 Bodhi is a web application that facilitates the process of publishing
@@ -45,37 +38,6 @@ Requires: python-kitchen
 Client tools for interacting with bodhi
 
 
-%package server
-Summary: A modular framework that facilitates publishing software updates
-Group: Applications/Internet
-Requires: TurboGears
-Requires: python-TurboMail
-Requires: intltool
-Requires: mash
-Requires: cvs
-Requires: koji
-Requires: python-bugzilla
-Requires: python-imaging
-Requires: python-crypto
-Requires: python-turboflot
-Requires: python-tgcaptcha2
-Requires: python-decorator
-Requires: mod_wsgi
-Requires: httpd
-Requires: python-markdown
-Requires: python-kitchen
-Requires: python-simplemediawiki
-Requires: python-fedora
-Requires: python-fedora-turbogears
-
-# 0.3.3+ for thread safety
-Requires: fedmsg >= 0.3.3
-
-
-%description server
-Bodhi is a modular framework that facilitates the process of publishing
-updates for a software distribution.
-
 %prep
 %setup -q
 
@@ -86,53 +48,28 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 %install
 %{__rm} -rf %{buildroot}
-%{__python} setup.py install --skip-build \
-    --install-data=%{_datadir} --root %{buildroot}
 
-%{__mkdir_p} %{buildroot}/var/lib/bodhi
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/httpd/conf.d
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/bodhi
-%{__mkdir_p} %{buildroot}%{_datadir}/%{name}
-%{__mkdir_p} -m 0755 %{buildroot}/%{_localstatedir}/log/bodhi
 
-%{__install} -m 644 apache/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
-%{__install} -m 640 %{name}.cfg %{buildroot}%{_sysconfdir}/%{name}/
-%{__install} -m 640 %{name}/config/*mash* %{buildroot}%{_sysconfdir}/%{name}/
-%{__install} apache/%{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
-
+%{__mkdir_p} %{buildroot}%{_bindir}/%{name}
+%{__mkdir_p} %{buildroot}%{_mandir}/man1
 %{__install} %{name}/tools/client.py %{buildroot}%{_bindir}/%{name}
+%{__install} docs/bodhi.1 %{buildroot}%{_mandir}/man1/bodhi.1
 
 
 %clean
 %{__rm} -rf %{buildroot}
 
-%pre server
-%{_sbindir}/groupadd -r %{name} &>/dev/null || :
-%{_sbindir}/useradd  -r -s /sbin/nologin -d %{_datadir}/%{name} -M \
-                     -c 'Bodhi Server' -g %{name} %{name} &>/dev/null || :
-
-
-%files server
-%defattr(-,root,root,-)
-%doc README COPYING
-%{python_sitelib}/%{name}/
-%{_bindir}/start-%{name}
-%{_bindir}/%{name}-*
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/bodhi.conf
-%dir %{_sysconfdir}/bodhi/
-%attr(-,bodhi,root) %{_datadir}/%{name}
-%attr(-,bodhi,root) %config(noreplace) %{_sysconfdir}/bodhi/*
-%attr(-,bodhi,root) %{_localstatedir}/log/bodhi
-%{python_sitelib}/%{name}-%{version}-py%{pyver}.egg-info/
-
 
 %files client
 %defattr(-,root,root,-)
 %{_bindir}/bodhi
-%{_mandir}/man1/bodhi.1.gz
+%{_mandir}/man1/bodhi.1*
 
 
 %changelog
+* Fri Jun 20 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 0.9.8-3
+- Only ship the client package on epel7
+
 * Wed Feb 19 2014 Luke Macken <lmacken@redhat.com> - 0.9.8-2
 - Remove the python-simplejson requirement (#1060234)
 
