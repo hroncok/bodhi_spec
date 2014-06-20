@@ -44,7 +44,6 @@ Client tools for interacting with bodhi
 rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 %build
-%{__python} setup.py build --install-data=%{_datadir}
 
 %install
 %{__rm} -rf %{buildroot}
