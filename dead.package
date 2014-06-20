@@ -1,1 +1,1 @@
-Only needed for the TurboGears1 stack which does not have a maintainer in EPEL7
+Relies on the turboGears1 stack which is presently lacking an EPEL7 maintainer and therefore is retired.
