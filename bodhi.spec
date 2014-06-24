@@ -28,6 +28,7 @@ BuildRequires: python-fedora
 BuildRequires: yum koji
 BuildRequires: python-tgcaptcha2
 BuildRequires: python-turboflot
+BuildRequires: python-markdown
 
 %description
 Bodhi is a web application that facilitates the process of publishing
@@ -140,6 +141,7 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 %changelog
 * Tue Jun 24 2014 Luke Macken <lmacken@redhat.com> - 0.9.10-1
 - Update to 0.9.10
+- Add a BR on python-markdown
 
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.9.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
