@@ -2,13 +2,8 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-<<<<<<< HEAD
-Version:        0.9.9.2
-Release:        2%{?dist}
-=======
 Version:        0.9.10
 Release:        1%{?dist}
->>>>>>> Update to 0.9.10
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
