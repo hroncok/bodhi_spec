@@ -2,8 +2,13 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
+<<<<<<< HEAD
 Version:        0.9.9.2
 Release:        2%{?dist}
+=======
+Version:        0.9.10
+Release:        1%{?dist}
+>>>>>>> Update to 0.9.10
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -133,6 +138,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Tue Jun 24 2014 Luke Macken <lmacken@redhat.com> - 0.9.10-1
+- Update to 0.9.10
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.9.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
