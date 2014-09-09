@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        0.9.8
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -49,7 +49,7 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 %{__rm} -rf %{buildroot}
 
 
-%{__mkdir_p} %{buildroot}%{_bindir}/%{name}
+%{__mkdir_p} %{buildroot}%{_bindir}
 %{__mkdir_p} %{buildroot}%{_mandir}/man1
 %{__install} %{name}/tools/client.py %{buildroot}%{_bindir}/%{name}
 %{__install} docs/bodhi.1 %{buildroot}%{_mandir}/man1/bodhi.1
@@ -66,6 +66,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Tue Sep 09 2014 Kevin Fenzi <kevin@scrye.com> 0.9.8-4
+- Fix install to correct place. Fixes bug #1115136
+
 * Fri Jun 20 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 0.9.8-3
 - Only ship the client package on epel7
 
