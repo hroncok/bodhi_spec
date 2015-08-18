@@ -1,0 +1,32 @@
+From 5f4a445b2d5841f77cfa6fe08e4231c205b8f3c9 Mon Sep 17 00:00:00 2001
+From: Luke Macken <lmacken@redhat.com>
+Date: Tue, 18 Aug 2015 12:02:46 -0600
+Subject: [PATCH 1/2] Make the bodhi-client properly print the update after
+ creation with bodhi2
+
+
+diff --git a/bodhi/tools/client.py b/bodhi/tools/client.py
+index 0e636c7..9db535e 100755
+--- a/bodhi/tools/client.py
++++ b/bodhi/tools/client.py
+@@ -228,6 +228,8 @@ def main():
+                         if 'updates' in data:
+                             for update in data['updates']:
+                                 print(bodhi.update_str(update).encode("UTF-8"))
++                        elif 'title' in data:
++                            print(bodhi.update_str(data).encode("UTF-8"))
+ 
+                 else:
+                     builds = ",".join(args)
+@@ -252,6 +254,8 @@ def main():
+                     if 'updates' in data:
+                         for update in data['updates']:
+                             print(bodhi.update_str(update).encode("UTF-8"))
++                    elif 'title' in data:
++                        print(bodhi.update_str(data).encode("UTF-8"))
+ 
+             elif opts.edit:
+                 verify_args(args)
+-- 
+2.4.3
+
