@@ -3,12 +3,14 @@
 
 Name:           bodhi
 Version:        0.9.8
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
 URL:            https://fedorahosted.org/bodhi
 Source0:        bodhi-%{version}.tar.bz2
+
+Patch0:         bodhi2-with-bodhi1-cli.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
@@ -40,6 +42,7 @@ Client tools for interacting with bodhi
 
 %prep
 %setup -q
+%patch0 -p0
 
 rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
@@ -66,6 +69,9 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %changelog
+* Tue Aug 18 2015 Luke Macken <lmacken@redhat.com> - 0.9.8-5
+- Patched to work better against bodhi2 with the latest python-fedora
+
 * Tue Sep 09 2014 Kevin Fenzi <kevin@scrye.com> 0.9.8-4
 - Fix install to correct place. Fixes bug #1115136
 
