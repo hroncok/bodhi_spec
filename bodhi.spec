@@ -119,7 +119,6 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %files server
-%defattr(-,root,root,-)
 %doc README COPYING
 %{python_sitelib}/%{name}/
 %{_bindir}/start-%{name}
@@ -133,7 +132,6 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 
 
 %files client
-%defattr(-,root,root,-)
 %{_bindir}/bodhi
 %{_mandir}/man1/bodhi.1.gz
 
