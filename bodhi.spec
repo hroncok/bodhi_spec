@@ -2,31 +2,86 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        0.9.12.2
-Release:        5%{?dist}
+Version:        2.1.8
+Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
-URL:            https://fedorahosted.org/bodhi
-Source0:        https://fedorahosted.org/releases/b/o/bodhi/bodhi-%{version}.tar.bz2
-
-Patch0:         0001-Make-the-bodhi-client-properly-print-the-update-afte.patch
-Patch1:         0002-cli-Get-the-queries-working-against-bodhi2.patch
-
+URL:            https://github.com/fedora-infra/bodhi
+Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
+Patch0:         0001-Set-the-version-in-the-setup.py-to-the-next-release.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
+ExcludeArch:    ppc64 ppc
 
-BuildRequires: python-setuptools
-BuildRequires: python-setuptools
-BuildRequires: python-devel
-BuildRequires: TurboGears
-BuildRequires: python-TurboMail
-BuildRequires: python-bugzilla
-BuildRequires: python-fedora
-BuildRequires: yum koji
-BuildRequires: python-tgcaptcha2
-BuildRequires: python-turboflot
-BuildRequires: python-markdown
+# For the tests
+BuildRequires:   python2
+BuildRequires:   python-nose
+#BuildRequires:   python-nose-cov
+BuildRequires:   python-webtest
+BuildRequires:   python-mock
+
+# For the app
+BuildRequires:   python-pyramid
+BuildRequires:   python-pyramid-mako
+#BuildRequires:   python-pyramid-debugtoolbar
+BuildRequires:   python-pyramid-tm
+BuildRequires:   python-waitress
+BuildRequires:   python-colander
+BuildRequires:   python-cornice
+BuildRequires:   python-cornice-sphinx
+
+BuildRequires:   python-openid
+BuildRequires:   python-pyramid-fas-openid
+BuildRequires:   packagedb-cli
+
+BuildRequires:   python-sqlalchemy
+BuildRequires:   python-zope-sqlalchemy
+
+BuildRequires:   python-webhelpers
+BuildRequires:   python-progressbar
+BuildRequires:   python-bunch
+
+# for captchas
+BuildRequires:   python-cryptography
+BuildRequires:   python-pillow
+BuildRequires:   liberation-mono-fonts
+#BuildRequires:   pcaro-hermit-fonts
+
+# Useful tools
+BuildRequires:   python-kitchen
+BuildRequires:   python-fedora
+BuildRequires:   python-pylibravatar
+BuildRequires:   python-pydns
+BuildRequires:   python-dogpile-cache
+BuildRequires:   python-arrow
+BuildRequires:   python-markdown
+BuildRequires:   python-librepo
+BuildRequires:   python-createrepo_c
+BuildRequires:   createrepo_c
+
+## i18n, stuff that we're not actually doing yet
+#BuildRequires:   python-babel
+#BuildRequires:   python-lingua
+
+# External resources
+BuildRequires:   python-bugzilla
+BuildRequires:   python-simplemediawiki
+BuildRequires:   fedmsg
+
+BuildRequires:   python-sphinx
+
+# For the bodhi-client
+BuildRequires:   python-click
+
+%if 0%{?rhel} <= 7
+BuildRequires:   python-webob
+Requires:        python-webob
+%endif
+
+Requires:       python-psycopg2
+Requires:       python2
+
 
 %description
 Bodhi is a web application that facilitates the process of publishing
@@ -35,7 +90,7 @@ updates for a software distribution.
 A modular piece of the Fedora Infrastructure stack
 * Utilizes the Koji Buildsystem for tracking RPMs
 * Creates the update repositories using Mash, which composes a repository based
-  on tagged builds in Koji. 
+  on tagged builds in Koji.
 
 
 %package client
@@ -44,6 +99,8 @@ Group: Applications/Internet
 Requires: koji yum
 Requires: python-fedora >= 0.3.5
 Requires: python-kitchen
+Requires: python-click
+
 
 %description client
 Client tools for interacting with bodhi
@@ -52,91 +109,160 @@ Client tools for interacting with bodhi
 %package server
 Summary: A modular framework that facilitates publishing software updates
 Group: Applications/Internet
-Requires: TurboGears
-Requires: python-TurboMail
-Requires: intltool
-Requires: mash
-Requires: cvs
-Requires: koji
-Requires: python-bugzilla
-Requires: python-imaging
-Requires: python-crypto
-Requires: python-turboflot
-Requires: python-tgcaptcha2
-Requires: python-decorator
-Requires: mod_wsgi
-Requires: httpd
-Requires: python-markdown
-Requires: python-kitchen
-Requires: python-simplemediawiki
-Requires: python-fedora
-Requires: python-fedora-turbogears
 
-# 0.3.3+ for thread safety
-Requires: fedmsg >= 0.3.3
+Requires:   mod_wsgi
+Requires:   httpd
+Requires:   python-psycopg2
+
+Requires:   python-pyramid
+Requires:   python-pyramid-mako
+#Requires:   python-pyramid-debugtoolbar
+Requires:   python-pyramid-tm
+Requires:   python-waitress
+Requires:   python-colander
+Requires:   python-cornice
+
+Requires:   python-openid
+Requires:   python-pyramid-fas-openid
+Requires:   packagedb-cli
+
+Requires:   python-sqlalchemy
+Requires:   python-zope-sqlalchemy
+
+Requires:   python-webhelpers
+Requires:   python-progressbar
+Requires:   python-bunch
+
+# for captchas
+Requires:   python-cryptography
+Requires:   python-pillow
+Requires:   liberation-mono-fonts
+#Requires:   pcaro-hermit-fonts
+
+# Useful tools
+Requires:   python-kitchen
+Requires:   python-fedora
+Requires:   python-pylibravatar
+Requires:   python-pydns
+Requires:   python-dogpile-cache
+Requires:   python-arrow
+Requires:   python-markdown
+Requires:   python-librepo
+Requires:   python-createrepo_c
+Requires:   createrepo_c
+
+## i18n, that we're not actually doing yet
+#Requires:   python-babel
+#Requires:   python-lingua
+
+# External resources
+Requires:   python-bugzilla
+Requires:   python-simplemediawiki
+Requires:   fedmsg
+
+# For cloning comps
+Requires:  git
+Requires:  libxml2-python
+Requires:  intltool
+
+Requires:  mash
+
+Requires:   python-sphinx
 
 
 %description server
 Bodhi is a modular framework that facilitates the process of publishing
 updates for a software distribution.
 
+
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
-rm -rf bodhi/tests bodhi/tools/test-bodhi.py
+# Kill some dev deps
+sed -i '/pyramid_debugtoolbar/d' setup.py
+sed -i '/pyramid_debugtoolbar/d' development.ini
+sed -i '/nose-cov/d' setup.py
+
+# Kill this from the egg-info deps so that bodhi-server doesn't demand it.
+sed -i '/click/d' setup.py
+
 
 %build
-%{__python} setup.py build --install-data=%{_datadir}
+%{__python} setup.py build #--install-data=%{_datadir}
+
 
 %install
 %{__rm} -rf %{buildroot}
 %{__python} setup.py install --skip-build \
-    --install-data=%{_datadir} --root %{buildroot}
+    --root %{buildroot} \
+    #--install-data=%{_datadir}
 
 %{__mkdir_p} %{buildroot}/var/lib/bodhi
+%{__mkdir_p} %{buildroot}/var/cache/bodhi
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/httpd/conf.d
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/fedmsg.d
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/bodhi
 %{__mkdir_p} %{buildroot}%{_datadir}/%{name}
 %{__mkdir_p} -m 0755 %{buildroot}/%{_localstatedir}/log/bodhi
 
 %{__install} -m 644 apache/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
-%{__install} -m 640 %{name}.cfg %{buildroot}%{_sysconfdir}/%{name}/
-%{__install} -m 640 %{name}/config/*mash* %{buildroot}%{_sysconfdir}/%{name}/
+%{__install} -m 640 production.ini %{buildroot}%{_sysconfdir}/%{name}/production.ini
+%{__install} -m 640 alembic.ini %{buildroot}%{_datadir}/%{name}/alembic.ini
+cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 %{__install} apache/%{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 
-%{__install} %{name}/tools/client.py %{buildroot}%{_bindir}/%{name}
+%{__install} -m 644 fedmsg.d/masher.py %{buildroot}%{_sysconfdir}/fedmsg.d/masher.py
+%{__install} -m 644 fedmsg.d/bodhi.py %{buildroot}%{_sysconfdir}/fedmsg.d/bodhi.py
+
+# We used to copy in things like this for bodhi1
+#%{__install} -m 640 %{name}/config/*mash* %{buildroot}%{_sysconfdir}/%{name}/
 
 
-%clean
-%{__rm} -rf %{buildroot}
+%check
+PYTHONPATH=. %{__python} setup.py test
+
 
 %pre server
 %{_sbindir}/groupadd -r %{name} &>/dev/null || :
 %{_sbindir}/useradd  -r -s /sbin/nologin -d %{_datadir}/%{name} -M \
                      -c 'Bodhi Server' -g %{name} %{name} &>/dev/null || :
 
-
 %files server
-%doc README COPYING
+%defattr(-,root,root,-)
+%doc README.rst CHANGES.txt
+%license COPYING
 %{python_sitelib}/%{name}/
-%{_bindir}/start-%{name}
-%{_bindir}/%{name}-*
+%{_bindir}/initialize_bodhi_db
+%{_bindir}/bodhi-expire-overrides
+%{_bindir}/bodhi-approve-testing
+%{_bindir}/bodhi-push
+%{_bindir}/bodhi-untag-branched
+%{_bindir}/bodhi-manage-releases
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/bodhi.conf
+%config(noreplace) %{_sysconfdir}/fedmsg.d/*
 %dir %{_sysconfdir}/bodhi/
 %attr(-,bodhi,root) %{_datadir}/%{name}
-%attr(-,bodhi,root) %config(noreplace) %{_sysconfdir}/bodhi/*
+%attr(-,bodhi,bodhi) %config(noreplace) %{_sysconfdir}/bodhi/*
 %attr(-,bodhi,root) %{_localstatedir}/log/bodhi
+%attr(0775,bodhi,bodhi) %{_localstatedir}/cache/bodhi
 %{python_sitelib}/%{name}-%{version}-py%{pyver}.egg-info/
 
 
 %files client
+%defattr(-,root,root,-)
+%doc README.rst CHANGES.txt
+%license COPYING
 %{_bindir}/bodhi
-%{_mandir}/man1/bodhi.1.gz
+# TODO .. get the man page back with help2man or something
+# %{_mandir}/man1/bodhi.1.gz
 
 
 %changelog
+* Fri Jul 29 2016 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.1.8-1
+- Update to 2.1.8. The spec file was largely taken from lmacken's COPR repository.
+- Fixed some bogus dates in the changelog.
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.12.2-5
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
@@ -453,7 +579,7 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 * Tue Oct 14 2008 Luke Macken <lmacken@redhat.com> - 0.5.9-1
 - Fix a variety of bugs, including a race-condition when editing.
 
-* Thu Oct 13 2008 Steve 'Ashcrow' Milner <smilner@redhat.com> - 0.5.8-2
+* Mon Oct 13 2008 Steve 'Ashcrow' Milner <smilner@redhat.com> - 0.5.8-2
 - Added default attributes to client files.
 
 * Sun Oct 12 2008 Luke Macken <lmacken@redhat.com> - 0.5.8-1
@@ -517,7 +643,7 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 * Sun Jan  6 2008 Luke Macken <lmacken@redhat.com> - 0.4.9-1
 - 0.4.9
 
-* Sat Dec  7 2007 Luke Macken <lmacken@redhat.com> - 0.4.8-1
+* Fri Dec  7 2007 Luke Macken <lmacken@redhat.com> - 0.4.8-1
 - 0.4.8
 
 * Wed Nov 28 2007 Luke Macken <lmacken@redhat.com> - 0.4.7-1
@@ -554,7 +680,7 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 - Add TurboGears to BuildRequires
 - Make some scripts executable to silence rpmlint
 
-* Sat Oct 16 2007 Luke Macken <lmacken@redhat.com> - 0.3.2-1
+* Tue Oct 16 2007 Luke Macken <lmacken@redhat.com> - 0.3.2-1
 - 0.3.2
 - Add COPYING file
 - s/python-json/python-simplejson/
@@ -571,7 +697,7 @@ rm -rf bodhi/tests bodhi/tools/test-bodhi.py
 * Sun Sep 16 2007 Luke Macken <lmacken@redhat.com> - 0.2.0-3
 - Add cvs to bodhi-server Requires
 
-* Thu Sep 15 2007 Luke Macken <lmacken@redhat.com> - 0.2.0-2
+* Sat Sep 15 2007 Luke Macken <lmacken@redhat.com> - 0.2.0-2
 - Handle python-setuptools-devel changes in Fedora 8
 - Update license to GPLv2+
 
