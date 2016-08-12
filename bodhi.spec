@@ -10,6 +10,8 @@ License:        GPLv2+
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
 Patch0:         0001-Set-the-version-in-the-setup.py-to-the-next-release.patch
+Patch1:         0002-Remove-cornice-from-the-Sphinx-project.patch
+Patch2:         0003-Add-a-basic-man-page-for-the-bodhi-2-cli.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 ExcludeArch:    ppc64 ppc
@@ -178,6 +180,8 @@ updates for a software distribution.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -190,6 +194,8 @@ sed -i '/click/d' setup.py
 
 %build
 %{__python} setup.py build #--install-data=%{_datadir}
+
+make %{?_smp_mflags} -C docs man
 
 
 %install
@@ -217,6 +223,9 @@ cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 
 # We used to copy in things like this for bodhi1
 #%{__install} -m 640 %{name}/config/*mash* %{buildroot}%{_sysconfdir}/%{name}/
+
+install -d %{buildroot}%{_mandir}/man1
+install -pm0644 docs/_build/man/bodhi.1 %{buildroot}%{_mandir}/man1/
 
 
 %check
@@ -254,14 +263,14 @@ PYTHONPATH=. %{__python} setup.py test
 %doc README.rst CHANGES.txt
 %license COPYING
 %{_bindir}/bodhi
-# TODO .. get the man page back with help2man or something
-# %{_mandir}/man1/bodhi.1.gz
+%{_mandir}/man1/bodhi.1*
 
 
 %changelog
 * Fri Jul 29 2016 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.1.8-1
 - Update to 2.1.8. The spec file was largely taken from lmacken's COPR repository.
 - Fixed some bogus dates in the changelog.
+- Backport patch to add man page from the develop branch.
 
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.12.2-5
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
