@@ -12,6 +12,7 @@ Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
 Patch0:         0001-Set-the-version-in-the-setup.py-to-the-next-release.patch
 Patch1:         0002-Remove-cornice-from-the-Sphinx-project.patch
 Patch2:         0003-Add-a-basic-man-page-for-the-bodhi-2-cli.patch
+Patch3:         0004-Add-a-version-option-to-the-CLI.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 ExcludeArch:    ppc64 ppc
@@ -182,6 +183,7 @@ updates for a software distribution.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -271,6 +273,7 @@ PYTHONPATH=. %{__python} setup.py test
 - Update to 2.1.8. The spec file was largely taken from lmacken's COPR repository.
 - Fixed some bogus dates in the changelog.
 - Backport patch to add man page from the develop branch.
+- Backport patch to add a --version flag to the cli from the develop branch.
 
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.12.2-5
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages

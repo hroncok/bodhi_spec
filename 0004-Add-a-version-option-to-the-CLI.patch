@@ -1,0 +1,41 @@
+From d6f31faefaf38ed477f5003b73c070d1245b6782 Mon Sep 17 00:00:00 2001
+From: Randy Barlow <randy@electronsweatshop.com>
+Date: Tue, 30 Aug 2016 10:11:51 -0400
+Subject: [PATCH] Add a --version option to the CLI.
+
+closes #895
+---
+ bodhi/cli.py       | 1 +
+ docs/man_bodhi.rst | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/bodhi/cli.py b/bodhi/cli.py
+index 9e08aaf..b1c3a7e 100644
+--- a/bodhi/cli.py
++++ b/bodhi/cli.py
+@@ -25,6 +25,7 @@ from fedora.client.bodhi import Bodhi2Client
+ 
+ 
+ @click.group()
++@click.version_option(message='%(version)s')
+ def cli():
+     pass
+ 
+diff --git a/docs/man_bodhi.rst b/docs/man_bodhi.rst
+index 7cc368b..79c4081 100644
+--- a/docs/man_bodhi.rst
++++ b/docs/man_bodhi.rst
+@@ -36,6 +36,10 @@ Most of the commands will accept these three options:
+ 
+     Many commands accept this flag to specify which user's updates should be operated upon.
+ 
++``--version``
++
++    Show version and exit. Not accepted by subcommands.
++
+ 
+ Commands
+ ========
+-- 
+2.9.2
+
