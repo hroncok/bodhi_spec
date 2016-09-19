@@ -2,23 +2,20 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        2.1.8
+Version:        2.2.0
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
-Patch0:         0001-Set-the-version-in-the-setup.py-to-the-next-release.patch
-Patch1:         0002-Remove-cornice-from-the-Sphinx-project.patch
-Patch2:         0003-Add-a-basic-man-page-for-the-bodhi-2-cli.patch
-Patch3:         0004-Add-a-version-option-to-the-CLI.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 ExcludeArch:    ppc64 ppc
 
 # For the tests
 BuildRequires:   python2
+BuildRequires:   python2-devel
 BuildRequires:   python-nose
 #BuildRequires:   python-nose-cov
 BuildRequires:   python-webtest
@@ -103,10 +100,30 @@ Requires: koji yum
 Requires: python-fedora >= 0.3.5
 Requires: python-kitchen
 Requires: python-click
+Requires: python2-bodhi == %{version}
 
 
 %description client
-Client tools for interacting with bodhi
+Client tools for interacting with bodhi.
+
+
+%package docs
+Summary: Bodhi documentation
+Group:   Applications/Internet
+
+
+%description docs
+Bodhi documentation.
+
+
+%package -n python2-bodhi
+Summary: Common files shared by bodhi-client and bodhi-server
+Group:   Applications/Internet
+%{?python_provide:%python_provide python2-bodhi}
+
+
+%description -n python2-bodhi
+Common files shared by bodhi-client and bodhi-server.
 
 
 %package server
@@ -114,6 +131,7 @@ Summary: A modular framework that facilitates publishing software updates
 Group: Applications/Internet
 
 Requires:   mod_wsgi
+Requires:   python2-bodhi == %{version}
 Requires:   httpd
 Requires:   python-psycopg2
 
@@ -180,23 +198,23 @@ updates for a software distribution.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
-sed -i '/pyramid_debugtoolbar/d' development.ini
+sed -i '/pyramid_debugtoolbar/d' development.ini.example
 sed -i '/nose-cov/d' setup.py
 
 # Kill this from the egg-info deps so that bodhi-server doesn't demand it.
 sed -i '/click/d' setup.py
 
+# The unit tests needs a development.ini
+mv development.ini.example development.ini
+
 
 %build
 %{__python} setup.py build #--install-data=%{_datadir}
 
+make %{?_smp_mflags} -C docs html
 make %{?_smp_mflags} -C docs man
 
 
@@ -229,8 +247,20 @@ cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 install -d %{buildroot}%{_mandir}/man1
 install -pm0644 docs/_build/man/bodhi.1 %{buildroot}%{_mandir}/man1/
 
+%if 0%{?rhel} <= 7
+# setuptools on EL 7 does not install bootstrap, so we need to symlink it
+ln -s ./bootstrap-3.1.1-fedora \
+    %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap
+%endif
+
 
 %check
+# setuptools on EL 7 doesn't install bootstrap. This test ensures that bootstrap is present.
+if [ ! -e %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap ]; then
+    echo "%{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap is missing, failing!"
+    /usr/bin/false
+fi;
+
 PYTHONPATH=. %{__python} setup.py test
 
 
@@ -239,11 +269,31 @@ PYTHONPATH=. %{__python} setup.py test
 %{_sbindir}/useradd  -r -s /sbin/nologin -d %{_datadir}/%{name} -M \
                      -c 'Bodhi Server' -g %{name} %{name} &>/dev/null || :
 
+
+%files client
+%defattr(-,root,root,-)
+%license COPYING
+%{_bindir}/bodhi
+%{python2_sitelib}/%{name}/client
+%{python2_sitelib}/%{name}_client-%{version}-py%{pyver}.egg-info
+%{_mandir}/man1/bodhi.1*
+
+
+%files docs
+%license COPYING
+%doc docs/_build/html/ README.rst
+
+
+%files -n python2-bodhi
+%license COPYING
+%dir %{python2_sitelib}/%{name}/
+%{python2_sitelib}/%{name}/__init__.py*
+%{python2_sitelib}/%{name}-%{version}-py%{pyver}.egg-info
+
+
 %files server
 %defattr(-,root,root,-)
-%doc README.rst CHANGES.txt
 %license COPYING
-%{python_sitelib}/%{name}/
 %{_bindir}/initialize_bodhi_db
 %{_bindir}/bodhi-expire-overrides
 %{_bindir}/bodhi-approve-testing
@@ -253,27 +303,22 @@ PYTHONPATH=. %{__python} setup.py test
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/bodhi.conf
 %config(noreplace) %{_sysconfdir}/fedmsg.d/*
 %dir %{_sysconfdir}/bodhi/
+%{python2_sitelib}/%{name}/server
+%{python2_sitelib}/%{name}_server-%{version}-py%{pyver}.egg-info
 %attr(-,bodhi,root) %{_datadir}/%{name}
 %attr(-,bodhi,bodhi) %config(noreplace) %{_sysconfdir}/bodhi/*
 %attr(-,bodhi,root) %{_localstatedir}/log/bodhi
 %attr(0775,bodhi,bodhi) %{_localstatedir}/cache/bodhi
-%{python_sitelib}/%{name}-%{version}-py%{pyver}.egg-info/
-
-
-%files client
-%defattr(-,root,root,-)
-%doc README.rst CHANGES.txt
-%license COPYING
-%{_bindir}/bodhi
-%{_mandir}/man1/bodhi.1*
 
 
 %changelog
-* Fri Jul 29 2016 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.1.8-1
-- Update to 2.1.8. The spec file was largely taken from lmacken's COPR repository.
+* Thu Sep 08 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.0-1
+- Update to 2.2.0. The spec file was largely taken from lmacken's COPR repository.
+- Add a common subpackage to own the Python distribution (#1372461).
+- Add a BuildRequires on python2-devel.
+- Add a test to check for the existence of bootstrap.
 - Fixed some bogus dates in the changelog.
-- Backport patch to add man page from the develop branch.
-- Backport patch to add a --version flag to the cli from the develop branch.
+- Add a -docs subpackage and remove docs from the client and server packages.
 
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.12.2-5
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
