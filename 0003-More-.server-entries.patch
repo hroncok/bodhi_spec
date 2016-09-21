@@ -1,0 +1,30 @@
+From c48af9d3f7919f9f3ad7944b81899f76c9329f2c Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <puiterwijk@redhat.com>
+Date: Wed, 21 Sep 2016 01:42:44 +0000
+Subject: [PATCH] More .server entries
+
+Signed-off-by: Patrick Uiterwijk <puiterwijk@redhat.com>
+---
+ bodhi/server/services/updates.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/bodhi/server/services/updates.py b/bodhi/server/services/updates.py
+index 7f7546c..ee6436e 100644
+--- a/bodhi/server/services/updates.py
++++ b/bodhi/server/services/updates.py
+@@ -93,9 +93,9 @@ def get_update_for_editing(request):
+     """Return a single update from an id, title, or alias for the edit form"""
+     return dict(
+         update=request.validated['update'],
+-        types=reversed(bodhi.models.UpdateType.values()),
+-        severities=sorted(bodhi.models.UpdateSeverity.values(), key=bodhi.server.util.sort_severity),
+-        suggestions=reversed(bodhi.models.UpdateSuggestion.values()),
++        types=reversed(bodhi.server.models.UpdateType.values()),
++        severities=sorted(bodhi.server.models.UpdateSeverity.values(), key=bodhi.server.util.sort_severity),
++        suggestions=reversed(bodhi.server.models.UpdateSuggestion.values()),
+     )
+ 
+ 
+-- 
+2.10.0
+

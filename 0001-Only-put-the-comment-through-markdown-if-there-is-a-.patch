@@ -1,0 +1,30 @@
+From 08618689315c5be0eba7467ded5cc27226d1d9f2 Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <puiterwijk@redhat.com>
+Date: Wed, 21 Sep 2016 00:43:30 +0000
+Subject: [PATCH] Only put the comment through markdown if there is a comment
+
+Because sometimes, the contents are None (null in the database), which
+breaks the markdown processing.
+
+Signed-off-by: Patrick Uiterwijk <puiterwijk@redhat.com>
+---
+ bodhi/server/templates/fragments.html | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/bodhi/server/templates/fragments.html b/bodhi/server/templates/fragments.html
+index 77c02b1..b38d647 100644
+--- a/bodhi/server/templates/fragments.html
++++ b/bodhi/server/templates/fragments.html
+@@ -34,7 +34,9 @@
+ 
+       <div class="panel-body">
+         <div class="col-md-8">
++          % if comment.text:
+           ${util.markup(comment.text) | n}
++          % endif
+         </div>
+         <div class="col-md-4 text-right">
+           % if comment.karma:
+-- 
+2.10.0
+
