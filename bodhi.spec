@@ -2,8 +2,8 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        2.2.0
-Release:        2%{?dist}
+Version:        2.2.1
+Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
@@ -13,12 +13,6 @@ Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
 # fix that problem, but it does fix template rendering on updates that have such comments.
 # See https://github.com/fedora-infra/bodhi/issues/949
 Patch0:         0001-Only-put-the-comment-through-markdown-if-there-is-a-.patch
-# This is backported from upstream, and fixes an import path.
-# See https://github.com/fedora-infra/bodhi/pull/944
-Patch1:         0002-bodhi.util-bodhi.server.util.patch
-# This is backported from upstream, and fixes an import path.
-# See https://github.com/fedora-infra/bodhi/pull/945
-Patch2:         0003-More-.server-entries.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 ExcludeArch:    ppc64 ppc
@@ -210,8 +204,6 @@ updates for a software distribution.
 %setup -q
 
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -326,6 +318,10 @@ PYTHONPATH=. %{__python} setup.py test
 
 
 %changelog
+* Thu Sep 22 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.1-1
+- Update to 2.2.1.
+- Drop two patches, as they are included in 2.2.1 upstream.
+
 * Tue Sep 20 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.0-2
 - Backport two patches to correct module paths from the devel branch upstream.
 - Apply a patch that stops NULL comments from being rendered with markdown.
