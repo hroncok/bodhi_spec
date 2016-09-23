@@ -1,0 +1,31 @@
+From b90bee3df0ff8db4456e058c5536ebad66bfeb3f Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <puiterwijk@redhat.com>
+Date: Fri, 23 Sep 2016 10:33:10 +0000
+Subject: [PATCH] Sometimes we have no mash, so dont wait for mash_thread if we
+ dont
+
+If self.state['completed_repos'] is True, we don't kick off a mash thread, and
+def mash() returns nothing (None).
+
+Signed-off-by: Patrick Uiterwijk <puiterwijk@redhat.com>
+---
+ bodhi/server/consumers/masher.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/bodhi/server/consumers/masher.py b/bodhi/server/consumers/masher.py
+index 4e450ab..a99bc48 100644
+--- a/bodhi/server/consumers/masher.py
++++ b/bodhi/server/consumers/masher.py
+@@ -663,6 +663,9 @@ class MasherThread(threading.Thread):
+         return mash_thread
+ 
+     def wait_for_mash(self, mash_thread):
++        if mash_thread is None:
++            self.log.info('Not waiting for mash thread, as there was no mash')
++            return
+         self.log.debug('Waiting for mash thread to finish')
+         mash_thread.join()
+         if mash_thread.success:
+-- 
+2.10.0
+
