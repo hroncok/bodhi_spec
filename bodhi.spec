@@ -2,23 +2,13 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        2.2.1
-Release:        3%{?dist}
+Version:        2.2.2
+Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 License:        GPLv2+
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
-# This patch is already merged upstream in the 2.2 and develop branches, but is not part of an
-# upstream release yet.
-Patch0:         0000-Do-not-allow-NULL-values-to-be-stored-in-the-Comment.patch
-# There is a problem where comments can be NULL in the database. This patch doesn't
-# fix that problem, but it does fix template rendering on updates that have such comments.
-# See https://github.com/fedora-infra/bodhi/issues/949
-Patch1:         0001-Only-put-the-comment-through-markdown-if-there-is-a-.patch
-# This patch is already merged upstream in the 2.2 and develop branches, but is not part of an
-# upstream release yet.
-Patch2:         0002-Sometimes-we-have-no-mash-so-dont-wait-for-mash_thre.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 ExcludeArch:    ppc64 ppc
@@ -209,10 +199,6 @@ updates for a software distribution.
 %prep
 %setup -q
 
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
 sed -i '/pyramid_debugtoolbar/d' development.ini.example
@@ -326,6 +312,9 @@ PYTHONPATH=. %{__python} setup.py test
 
 
 %changelog
+* Sat Sep 24 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.2-1
+- Update to 2.2.2.
+
 * Fri Sep 23 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.1-3
 - Add a patch to disallow NULL text on the Comment model.
 
