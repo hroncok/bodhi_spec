@@ -2,7 +2,7 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        2.2.2
+Version:        2.2.3
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -312,6 +312,9 @@ PYTHONPATH=. %{__python} setup.py test
 
 
 %changelog
+* Tue Sep 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.3-1
+- Update to 2.2.3.
+
 * Sat Sep 24 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.2-1
 - Update to 2.2.2.
 
