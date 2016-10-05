@@ -135,6 +135,7 @@ Requires:   python2-bodhi == %{version}
 Requires:   httpd
 Requires:   python-psycopg2
 
+Requires:   python2-fedmsg-atomic-composer
 Requires:   python-pyramid
 Requires:   python-pyramid-mako
 #Requires:   python-pyramid-debugtoolbar
