@@ -2,7 +2,7 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        2.2.3
+Version:        2.2.4
 Release:        1%{?dist}
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
@@ -247,11 +247,11 @@ cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 install -d %{buildroot}%{_mandir}/man1
 install -pm0644 docs/_build/man/bodhi.1 %{buildroot}%{_mandir}/man1/
 
-%if 0%{?rhel} <= 7
-# setuptools on EL 7 does not install bootstrap, so we need to symlink it
-ln -s ./bootstrap-3.1.1-fedora \
-    %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap
-%endif
+if [ ! -e %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap ]; then
+    # setuptools on EL 7 does not install bootstrap, so we need to symlink it
+    ln -s ./bootstrap-3.1.1-fedora \
+        %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap
+fi;
 
 
 %check
@@ -312,6 +312,10 @@ PYTHONPATH=. %{__python} setup.py test
 
 
 %changelog
+* Tue Oct 04 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.4-1
+- Update to 2.2.4.
+- Test for presence of bootstrap rather than testing the EL version.
+
 * Tue Sep 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.3-1
 - Update to 2.2.3.
 
