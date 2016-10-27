@@ -2,20 +2,23 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        2.2.4
+Version:        2.3.0
 Release:        1%{?dist}
+BuildArch:      noarch
+ExcludeArch:    ppc64 ppc
+
+License:        GPLv2+
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
-License:        GPLv2+
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch:      noarch
-ExcludeArch:    ppc64 ppc
 
 # For the tests
 BuildRequires:   python2
 BuildRequires:   python2-devel
+BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
+BuildRequires:   python-flake8
 BuildRequires:   python-nose
 #BuildRequires:   python-nose-cov
 BuildRequires:   python-webtest
@@ -135,7 +138,7 @@ Requires:   python2-bodhi == %{version}
 Requires:   httpd
 Requires:   python-psycopg2
 
-Requires:   python2-fedmsg-atomic-composer
+Requires:   python2-fedmsg-atomic-composer >= 2016.3
 Requires:   python-pyramid
 Requires:   python-pyramid-mako
 #Requires:   python-pyramid-debugtoolbar
@@ -198,7 +201,7 @@ updates for a software distribution.
 
 
 %prep
-%setup -q
+%setup -q -n bodhi-%{version}
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -213,7 +216,7 @@ mv development.ini.example development.ini
 
 
 %build
-%{__python} setup.py build #--install-data=%{_datadir}
+%py2_build
 
 make %{?_smp_mflags} -C docs html
 make %{?_smp_mflags} -C docs man
@@ -221,9 +224,7 @@ make %{?_smp_mflags} -C docs man
 
 %install
 %{__rm} -rf %{buildroot}
-%{__python} setup.py install --skip-build \
-    --root %{buildroot} \
-    #--install-data=%{_datadir}
+%py2_install
 
 %{__mkdir_p} %{buildroot}/var/lib/bodhi
 %{__mkdir_p} %{buildroot}/var/cache/bodhi
@@ -262,7 +263,7 @@ if [ ! -e %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap ]; then
     /usr/bin/false
 fi;
 
-PYTHONPATH=. %{__python} setup.py test
+PYTHONPATH=. %{__python} setup.py nosetests
 
 
 %pre server
@@ -313,6 +314,11 @@ PYTHONPATH=. %{__python} setup.py test
 
 
 %changelog
+* Wed Oct 19 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.0-1
+- Update to 2.3.0.
+- Use the fancy new py2_build and py2_install macros.
+- Now depends on python-fedmsg-atomic-composer 2016.3.
+
 * Tue Oct 04 2016 Randy Barlow <randy@electronsweatshop.com> - 2.2.4-1
 - Update to 2.2.4.
 - Test for presence of bootstrap rather than testing the EL version.
