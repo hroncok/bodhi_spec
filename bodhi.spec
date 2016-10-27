@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        2.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 ExcludeArch:    ppc64 ppc
 
@@ -103,7 +103,7 @@ Requires: koji yum
 Requires: python-fedora >= 0.3.5
 Requires: python-kitchen
 Requires: python-click
-Requires: python2-bodhi == %{version}
+Requires: python2-bodhi == %{version}-%{release}
 
 
 %description client
@@ -134,7 +134,7 @@ Summary: A modular framework that facilitates publishing software updates
 Group: Applications/Internet
 
 Requires:   mod_wsgi
-Requires:   python2-bodhi == %{version}
+Requires:   python2-bodhi == %{version}-%{release}
 Requires:   httpd
 Requires:   python-psycopg2
 
@@ -314,6 +314,9 @@ PYTHONPATH=. %{__python} setup.py nosetests
 
 
 %changelog
+* Thu Oct 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.0-2
+- The client and server packages now depend on the common package by release (#1389518).
+
 * Wed Oct 19 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.0-1
 - Update to 2.3.0.
 - Use the fancy new py2_build and py2_install macros.
