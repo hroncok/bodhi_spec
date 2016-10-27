@@ -74,7 +74,7 @@ BuildRequires:   fedmsg
 
 BuildRequires:   python-sphinx
 
-# For the bodhi-client
+# For the bodhi-client and push.py
 BuildRequires:   python-click
 
 %if 0%{?rhel} <= 7
@@ -144,6 +144,7 @@ Requires:   python-pyramid-mako
 #Requires:   python-pyramid-debugtoolbar
 Requires:   python-pyramid-tm
 Requires:   python-waitress
+Requires:   python-click
 Requires:   python-colander
 Requires:   python-cornice
 
@@ -314,6 +315,9 @@ PYTHONPATH=. %{__python} setup.py nosetests
 
 
 %changelog
+* ?
+- bodhi-server now requires python-click.
+
 * Thu Oct 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.1-1
 - Update to 2.3.1.
 
