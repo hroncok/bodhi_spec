@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        2.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 ExcludeArch:    ppc64 ppc
 
@@ -315,7 +315,7 @@ PYTHONPATH=. %{__python} setup.py nosetests
 
 
 %changelog
-* ?
+* Thu Oct 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.1-2
 - bodhi-server now requires python-click.
 
 * Thu Oct 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.1-1
