@@ -2,8 +2,8 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        2.3.0
-Release:        2%{?dist}
+Version:        2.3.1
+Release:        1%{?dist}
 BuildArch:      noarch
 ExcludeArch:    ppc64 ppc
 
@@ -314,6 +314,9 @@ PYTHONPATH=. %{__python} setup.py nosetests
 
 
 %changelog
+* Thu Oct 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.1-1
+- Update to 2.3.1.
+
 * Thu Oct 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.0-2
 - The client and server packages now depend on the common package by release (#1389518).
 
