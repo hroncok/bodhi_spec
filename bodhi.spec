@@ -3,9 +3,8 @@
 
 Name:           bodhi
 Version:        2.3.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 BuildArch:      noarch
-ExcludeArch:    ppc64 ppc
 
 License:        GPLv2+
 Summary:        A modular framework that facilitates publishing software updates
@@ -315,6 +314,9 @@ PYTHONPATH=. %{__python} setup.py nosetests
 
 
 %changelog
+* Mon Nov 07 2016 Dennis Gilmore <dennis@ausil.us> - 2.3.1-3
+- remove the seemingly arbitary exclude of ppc and ppc64
+
 * Thu Oct 27 2016 Randy Barlow <randy@electronsweatshop.com> - 2.3.1-2
 - bodhi-server now requires python-click.
 
