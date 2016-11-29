@@ -2,8 +2,8 @@
 %{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           bodhi
-Version:        2.3.1
-Release:        3%{?dist}
+Version:        2.3.3
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -11,7 +11,6 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 # For the tests
 BuildRequires:   python2
@@ -132,6 +131,7 @@ Common files shared by bodhi-client and bodhi-server.
 Summary: A modular framework that facilitates publishing software updates
 Group: Applications/Internet
 
+Requires:   fedmsg-base
 Requires:   mod_wsgi
 Requires:   python2-bodhi == %{version}-%{release}
 Requires:   httpd
@@ -223,7 +223,6 @@ make %{?_smp_mflags} -C docs man
 
 
 %install
-%{__rm} -rf %{buildroot}
 %py2_install
 
 %{__mkdir_p} %{buildroot}/var/lib/bodhi
@@ -314,6 +313,14 @@ PYTHONPATH=. %{__python} setup.py nosetests
 
 
 %changelog
+* Tue Nov 29 2016 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-1
+- Update to 2.3.3.
+- Don't define or delete the buildroot anymore.
+- Add a Requires on fedmsg-base, which owns /etc/fedmsg.d for bodhi-server to put files in.
+
+* Thu Nov 17 2016 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.2-1
+- Update to 2.3.2.
+
 * Mon Nov 07 2016 Dennis Gilmore <dennis@ausil.us> - 2.3.1-3
 - remove the seemingly arbitary exclude of ppc and ppc64
 
