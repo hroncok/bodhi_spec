@@ -1,0 +1,26 @@
+From 49354037f7a46796a332821ec6c40e8bf30932fd Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <puiterwijk@redhat.com>
+Date: Fri, 16 Dec 2016 00:53:56 +0000
+Subject: [PATCH] Set krb_rdns to False
+
+Signed-off-by: Patrick Uiterwijk <puiterwijk@redhat.com>
+---
+ bodhi/server/buildsys.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bodhi/server/buildsys.py b/bodhi/server/buildsys.py
+index fbbcd347..e24bd4fb 100644
+--- a/bodhi/server/buildsys.py
++++ b/bodhi/server/buildsys.py
+@@ -291,7 +291,7 @@ class DevBuildsys(Buildsystem):
+ 
+ def koji_login(config):
+     """ Login to Koji and return the session """
+-    koji_client = koji.ClientSession(_koji_hub, {})
++    koji_client = koji.ClientSession(_koji_hub, {'krb_rdns': False})
+     if not koji_client.krb_login(**get_krb_conf(config)):
+         log.error('Koji krb_login failed')
+     return koji_client
+-- 
+2.11.0
+

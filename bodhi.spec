@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        2.3.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -11,6 +11,14 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
+# https://github.com/fedora-infra/bodhi/pull/1137
+Patch0:         0000-Reload-builds-and-releases-after-we-commit-the-trans.patch
+# https://github.com/fedora-infra/bodhi/pull/1139
+Patch1:         0001-Skip-builds-that-are-not-assigned-to-a-release.patch
+# https://github.com/fedora-infra/bodhi/pull/1142
+Patch2:         0002-Lock-the-buildsystem-while-logging-in.patch
+# https://github.com/fedora-infra/bodhi/pull/1163
+Patch3:         0003-Set-krb_rdns-to-False.patch
 
 # For the tests
 BuildRequires:   python2
@@ -73,7 +81,11 @@ BuildRequires:   fedmsg
 BuildRequires:   python-sphinx
 
 # For the bodhi-client and push.py
+%if 0%{?fedora} >= 26
 BuildRequires:   python2-click
+%else
+BuildRequires:   python-click
+%endif
 
 %if 0%{?rhel} <= 7
 BuildRequires:   python-webob
@@ -100,7 +112,12 @@ Group: Applications/Internet
 Requires: koji yum
 Requires: python-fedora >= 0.3.5
 Requires: python-kitchen
-Requires: python2-click
+%if 0%{?fedora} >= 26
+Requires:   python2-click
+%else
+Requires:   python-click
+%endif
+
 Requires: python2-bodhi == %{version}-%{release}
 
 
@@ -143,7 +160,11 @@ Requires:   python-pyramid-mako
 #Requires:   python-pyramid-debugtoolbar
 Requires:   python-pyramid-tm
 Requires:   python-waitress
+%if 0%{?fedora} >= 26
 Requires:   python2-click
+%else
+Requires:   python-click
+%endif
 Requires:   python-colander
 Requires:   python-cornice
 
@@ -202,6 +223,11 @@ updates for a software distribution.
 
 %prep
 %setup -q -n bodhi-%{version}
+
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -323,6 +349,12 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Fri Jan 13 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-3
+- Apply four patches from git that are currently hotfixed on
+  bodhi.fedoraproject.org.
+- Conditionally depend on python-click or python2-click, since Fedora
+  24 doesn't have python2-click.
+
 * Sun Jan 08 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-2
 - Require python2-click instead of python-click (#1411141).
 - Backport a unit test patch so the tests will pass in 2017.
