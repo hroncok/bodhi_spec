@@ -1,0 +1,31 @@
+From 9ac5f8436ed0845e12ff84066298e03367e28311 Mon Sep 17 00:00:00 2001
+From: Jeremy Cline <jeremy@jcline.org>
+Date: Thu, 19 Jan 2017 16:38:58 -0500
+Subject: [PATCH 2/2] Fix submitting multiple updates at a time
+
+The commit prior to this (04d04f31e08ba30aa289e5593f42fec748df9835)
+reloads the builds after committing a transaction, but accidentally
+references an old variable that results in the same build being queried
+for repeatedly. This caused submitting more than one build to break.
+
+Signed-off-by: Jeremy Cline <jeremy@jcline.org>
+---
+ bodhi/server/services/updates.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bodhi/server/services/updates.py b/bodhi/server/services/updates.py
+index 28ac2ce..e88f3f3 100644
+--- a/bodhi/server/services/updates.py
++++ b/bodhi/server/services/updates.py
+@@ -379,7 +379,7 @@ def new_update(request):
+         # were tied to the previous session that has now been terminated.
+         builds = []
+         releases = set()
+-        for build in data['builds']:
++        for nvr in data['builds']:
+             # At this moment, we are sure the builds are in the database (that is what the commit
+             # was for actually).
+             build = Build.get(nvr, request.db)
+-- 
+2.9.3
+

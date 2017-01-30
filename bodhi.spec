@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        2.3.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -19,6 +19,8 @@ Patch1:         0001-Skip-builds-that-are-not-assigned-to-a-release.patch
 Patch2:         0002-Lock-the-buildsystem-while-logging-in.patch
 # https://github.com/fedora-infra/bodhi/pull/1163
 Patch3:         0003-Set-krb_rdns-to-False.patch
+# https://github.com/fedora-infra/bodhi/pull/1232
+Patch4:         0004-Fix-submitting-multiple-updates-at-a-time.patch
 
 # For the tests
 BuildRequires:   python2
@@ -228,6 +230,7 @@ updates for a software distribution.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -349,6 +352,9 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Mon Jan 30 2017 Jeremy Cline <jeremy@jcline.org> - 2.3.3-4
+- Apply a patch that fixes one of the hotfixes applied in 2.3.3-3
+
 * Fri Jan 13 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-3
 - Apply four patches from git that are currently hotfixed on
   bodhi.fedoraproject.org.
