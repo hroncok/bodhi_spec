@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        2.3.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -21,6 +21,10 @@ Patch2:         0002-Lock-the-buildsystem-while-logging-in.patch
 Patch3:         0003-Set-krb_rdns-to-False.patch
 # https://github.com/fedora-infra/bodhi/pull/1232
 Patch4:         0004-Fix-submitting-multiple-updates-at-a-time.patch
+# https://github.com/fedora-infra/bodhi/pull/1145
+Patch5:         0005-Bodhi-now-comments-on-non-autokarma-updates-after-en.patch
+# https://github.com/fedora-infra/bodhi/pull/1145
+Patch6:         0006-Only-comment-on-non-autokarma-updates-meeting-testin.patch
 
 # For the tests
 BuildRequires:   python2
@@ -231,6 +235,8 @@ updates for a software distribution.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -352,6 +358,9 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Mon Feb 06 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-5
+- Apply patches to fix repeat e-mails (#1396689).
+
 * Mon Jan 30 2017 Jeremy Cline <jeremy@jcline.org> - 2.3.3-4
 - Apply a patch that fixes one of the hotfixes applied in 2.3.3-3
 
