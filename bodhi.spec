@@ -1,9 +1,6 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-%{!?pyver: %global pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
-
 Name:           bodhi
-Version:        2.3.3
-Release:        5%{?dist}
+Version:        2.4.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -11,20 +8,6 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
-# https://github.com/fedora-infra/bodhi/pull/1137
-Patch0:         0000-Reload-builds-and-releases-after-we-commit-the-trans.patch
-# https://github.com/fedora-infra/bodhi/pull/1139
-Patch1:         0001-Skip-builds-that-are-not-assigned-to-a-release.patch
-# https://github.com/fedora-infra/bodhi/pull/1142
-Patch2:         0002-Lock-the-buildsystem-while-logging-in.patch
-# https://github.com/fedora-infra/bodhi/pull/1163
-Patch3:         0003-Set-krb_rdns-to-False.patch
-# https://github.com/fedora-infra/bodhi/pull/1232
-Patch4:         0004-Fix-submitting-multiple-updates-at-a-time.patch
-# https://github.com/fedora-infra/bodhi/pull/1145
-Patch5:         0005-Bodhi-now-comments-on-non-autokarma-updates-after-en.patch
-# https://github.com/fedora-infra/bodhi/pull/1145
-Patch6:         0006-Only-comment-on-non-autokarma-updates-meeting-testin.patch
 
 # For the tests
 BuildRequires:   python2
@@ -43,7 +26,7 @@ BuildRequires:   python-pyramid-mako
 BuildRequires:   python-pyramid-tm
 BuildRequires:   python-waitress
 BuildRequires:   python-colander
-BuildRequires:   python-cornice
+BuildRequires:   python-cornice < 2
 BuildRequires:   python-cornice-sphinx
 
 BuildRequires:   python-openid
@@ -52,6 +35,7 @@ BuildRequires:   packagedb-cli
 
 BuildRequires:   python-sqlalchemy
 BuildRequires:   python-zope-sqlalchemy
+BuildRequires:   python2-sqlalchemy_schemadisplay
 
 BuildRequires:   python-webhelpers
 BuildRequires:   python-progressbar
@@ -118,6 +102,7 @@ Group: Applications/Internet
 Requires: koji yum
 Requires: python-fedora >= 0.3.5
 Requires: python-kitchen
+Requires: python2-six
 %if 0%{?fedora} >= 26
 Requires:   python2-click
 %else
@@ -172,7 +157,7 @@ Requires:   python2-click
 Requires:   python-click
 %endif
 Requires:   python-colander
-Requires:   python-cornice
+Requires:   python-cornice < 2
 
 Requires:   python-openid
 Requires:   python-pyramid-fas-openid
@@ -228,15 +213,7 @@ updates for a software distribution.
 
 
 %prep
-%setup -q -n bodhi-%{version}
-
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
+%autosetup -n bodhi-%{version}
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -281,7 +258,7 @@ cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 #%{__install} -m 640 %{name}/config/*mash* %{buildroot}%{_sysconfdir}/%{name}/
 
 install -d %{buildroot}%{_mandir}/man1
-install -pm0644 docs/_build/man/bodhi.1 %{buildroot}%{_mandir}/man1/
+install -pm0644 docs/_build/man/*.1 %{buildroot}%{_mandir}/man1/
 
 if [ ! -e %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap ]; then
     # setuptools on EL 7 does not install bootstrap, so we need to symlink it
@@ -297,16 +274,6 @@ if [ ! -e %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap ]; then
     /usr/bin/false
 fi;
 
-# Bodhi 2.3.3 has tests that depend on it being 2016. Though this is fixed in develop, the patch
-# does not cleanly apply to 2.3.3 and it is not worth the effort to backport it for now. Once we
-# update to the next Bodhi release we can delete this if/else block below and go back to running the
-# tests.
-%if "%{version}" == "2.3.3"
-exit 0
-%else
-# This will remind us to delete this if/else block when we update to the next bodhi release.
-exit 1
-%endif
 PYTHONPATH=. %{__python2} setup.py nosetests
 
 
@@ -321,7 +288,7 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 %license COPYING
 %{_bindir}/bodhi
 %{python2_sitelib}/%{name}/client
-%{python2_sitelib}/%{name}_client-%{version}-py%{pyver}.egg-info
+%{python2_sitelib}/%{name}_client-%{version}-py%{python2_version}.egg-info
 %{_mandir}/man1/bodhi.1*
 
 
@@ -334,13 +301,14 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 %license COPYING
 %dir %{python2_sitelib}/%{name}/
 %{python2_sitelib}/%{name}/__init__.py*
-%{python2_sitelib}/%{name}-%{version}-py%{pyver}.egg-info
+%{python2_sitelib}/%{name}-%{version}-py%{python2_version}.egg-info
 
 
 %files server
 %defattr(-,root,root,-)
 %license COPYING
 %{_bindir}/initialize_bodhi_db
+%{_bindir}/bodhi-clean-old-mashes
 %{_bindir}/bodhi-expire-overrides
 %{_bindir}/bodhi-approve-testing
 %{_bindir}/bodhi-push
@@ -350,7 +318,9 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 %config(noreplace) %{_sysconfdir}/fedmsg.d/*
 %dir %{_sysconfdir}/bodhi/
 %{python2_sitelib}/%{name}/server
-%{python2_sitelib}/%{name}_server-%{version}-py%{pyver}.egg-info
+%{python2_sitelib}/%{name}_server-%{version}-py%{python2_version}.egg-info
+%{_mandir}/man1/bodhi-push.1*
+%{_mandir}/man1/initialize_bodhi_db.1*
 %attr(-,bodhi,root) %{_datadir}/%{name}
 %attr(-,bodhi,bodhi) %config(noreplace) %{_sysconfdir}/bodhi/*
 %attr(-,bodhi,root) %{_localstatedir}/log/bodhi
@@ -358,6 +328,11 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Mon Feb 06 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.4.0-1
+- Update to 2.4.0.
+- Drop some unneeded globals from the top of the spec file.
+- https://github.com/fedora-infra/bodhi/releases/tag/2.4.0
+
 * Mon Feb 06 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-5
 - Apply patches to fix repeat e-mails (#1396689).
 
