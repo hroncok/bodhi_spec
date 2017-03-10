@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -8,6 +8,7 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
+Patch0:         0000-Hard-code-wait_for_sync-to-look-for-x86_64.patch
 
 # For the tests
 BuildRequires:   python2
@@ -213,7 +214,9 @@ updates for a software distribution.
 
 
 %prep
-%autosetup -n bodhi-%{version}
+%setup -q -n bodhi-%{version}
+
+%patch0 -p1
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -328,6 +331,10 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Fri Mar 10 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.4.0-2
+- Apply a patch to workaround https://github.com/fedora-infra/bodhi/issues/1343 until a true fix is
+  available.
+
 * Mon Feb 06 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.4.0-1
 - Update to 2.4.0.
 - Drop some unneeded globals from the top of the spec file.
