@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.4.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -100,7 +100,7 @@ A modular piece of the Fedora Infrastructure stack
 %package client
 Summary: Bodhi Client
 Group: Applications/Internet
-Requires: koji yum
+Requires: koji
 Requires: python-fedora >= 0.3.5
 Requires: python-kitchen
 Requires: python2-six
@@ -331,6 +331,9 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Wed Mar 22 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.4.0-3
+- Drop depenency on yum from the client (#1135681).
+
 * Fri Mar 10 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.4.0-2
 - Apply a patch to workaround https://github.com/fedora-infra/bodhi/issues/1343 until a true fix is
   available.
