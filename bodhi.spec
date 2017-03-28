@@ -1,13 +1,13 @@
 Name:           bodhi
-Version:        2.4.0
-Release:        3%{?dist}
+Version:        2.5.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
 Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
-Source0:        https://github.com/fedora-infra/bodhi/archive/%{version}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         0000-Hard-code-wait_for_sync-to-look-for-x86_64.patch
 
 # For the tests
@@ -16,14 +16,12 @@ BuildRequires:   python2-devel
 BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
 BuildRequires:   python-flake8
 BuildRequires:   python-nose
-#BuildRequires:   python-nose-cov
 BuildRequires:   python-webtest
 BuildRequires:   python-mock
 
 # For the app
 BuildRequires:   python-pyramid
 BuildRequires:   python-pyramid-mako
-#BuildRequires:   python-pyramid-debugtoolbar
 BuildRequires:   python-pyramid-tm
 BuildRequires:   python-waitress
 BuildRequires:   python-colander
@@ -46,7 +44,6 @@ BuildRequires:   python-bunch
 BuildRequires:   python-cryptography
 BuildRequires:   python-pillow
 BuildRequires:   liberation-mono-fonts
-#BuildRequires:   pcaro-hermit-fonts
 
 # Useful tools
 BuildRequires:   python-kitchen
@@ -59,10 +56,6 @@ BuildRequires:   python-markdown
 BuildRequires:   python-librepo
 BuildRequires:   python-createrepo_c
 BuildRequires:   createrepo_c
-
-## i18n, stuff that we're not actually doing yet
-#BuildRequires:   python-babel
-#BuildRequires:   python-lingua
 
 # External resources
 BuildRequires:   python-bugzilla
@@ -80,11 +73,8 @@ BuildRequires:   python-click
 
 %if 0%{?rhel} <= 7
 BuildRequires:   python-webob
-Requires:        python-webob
+BuildRequires:   python2-sphinx-theme-alabaster
 %endif
-
-Requires:       python-psycopg2
-Requires:       python2
 
 
 %description
@@ -149,7 +139,6 @@ Requires:   python-psycopg2
 Requires:   python2-fedmsg-atomic-composer >= 2016.3
 Requires:   python-pyramid
 Requires:   python-pyramid-mako
-#Requires:   python-pyramid-debugtoolbar
 Requires:   python-pyramid-tm
 Requires:   python-waitress
 %if 0%{?fedora} >= 26
@@ -175,7 +164,6 @@ Requires:   python-bunch
 Requires:   python-cryptography
 Requires:   python-pillow
 Requires:   liberation-mono-fonts
-#Requires:   pcaro-hermit-fonts
 
 # Useful tools
 Requires:   python-kitchen
@@ -188,10 +176,6 @@ Requires:   python-markdown
 Requires:   python-librepo
 Requires:   python-createrepo_c
 Requires:   createrepo_c
-
-## i18n, that we're not actually doing yet
-#Requires:   python-babel
-#Requires:   python-lingua
 
 # External resources
 Requires:   python-bugzilla
@@ -206,6 +190,28 @@ Requires:  intltool
 Requires:  mash
 
 Requires:   python-sphinx
+%if 0%{?rhel} <= 7
+Requires:        python-webob
+%endif
+
+Provides:  bundled(aajohan-comfortaa-fonts)
+Provides:  bundled(abattis-cantarell-fonts)
+Provides:  bundled(bootstrap) = 3.0.1
+Provides:  bundled(bootstrap) = 3.0.2
+Provides:  bundled(bootstrap) = 3.1.1
+Provides:  bunfled(chrissimpkins-hack-fonts)
+Provides:  bundled(fedora-bootstrap) = 1.0.1
+Provides:  bundled(fontawesome-fonts-web) = 4.4.0
+Provides:  bundled(js-chart)
+Provides:  bundled(js-excanvas)
+Provides:  bundled(js-jquery)
+Provides:  bundled(js-jquery) = 1.10.2
+Provides:  bundled(js-messenger)
+Provides:  bundled(js-moment)
+Provides:  bundled(js-typeahead.js) = 0.10.2
+Provides:  bundled(nodejs-flot)
+Provides:  bundled(open-sans-fonts)
+Provides:  bundled(xstatic-bootstrap-datepicker-common)
 
 
 %description server
@@ -331,6 +337,12 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Tue Mar 28 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.5.0-1
+- Update to 2.5.0.
+- https://github.com/fedora-infra/bodhi/releases/tag/2.5.0
+- Declare all the bundled packages found in bodhi-server's static/ folder.
+- Remove commented Requires and BuildRequires.
+
 * Wed Mar 22 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.4.0-3
 - Drop depenency on yum from the client (#1135681).
 
