@@ -1,0 +1,29 @@
+From 98b4b0dee3bd9d02c670f8c23334d9d541f9793c Mon Sep 17 00:00:00 2001
+From: Randy Barlow <randy@electronsweatshop.com>
+Date: Mon, 10 Apr 2017 13:41:25 -0400
+Subject: [PATCH] Load the config before getting the db factory.
+
+This hotfix was written for
+https://github.com/fedora-infra/bodhi/issues/1423 by Patrick
+Uiterwijk.
+
+Signed-off-by: Randy Barlow <randy@electronsweatshop.com>
+---
+ bodhi/server/models.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/bodhi/server/models.py b/bodhi/server/models.py
+index bacba3b..0aac544 100644
+--- a/bodhi/server/models.py
++++ b/bodhi/server/models.py
+@@ -2435,6 +2435,7 @@ def get_db_factory():
+     session that you can use with a context manager. If you wish to get a database session for a
+     request, see bodhi.server.get_db_session_for_request().
+     """
++    config.load_config()
+     engine = engine_from_config(config, 'sqlalchemy.')
+     Base.metadata.create_all(engine)
+     return transactional_session_maker(engine)
+-- 
+1.8.3.1
+
