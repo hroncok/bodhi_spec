@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        2.5.0
-Release:        2%{?dist}
+Version:        2.6.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -8,9 +8,6 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:         0000-Hard-code-wait_for_sync-to-look-for-x86_64.patch
-# https://github.com/fedora-infra/bodhi/issues/1423
-Patch1:         0001-Load-the-config-before-getting-the-db-factory.patch
 
 # For the tests
 BuildRequires:   python2
@@ -35,7 +32,6 @@ BuildRequires:   python-pyramid-fas-openid
 BuildRequires:   packagedb-cli
 
 BuildRequires:   python-sqlalchemy
-BuildRequires:   python-zope-sqlalchemy
 BuildRequires:   python2-sqlalchemy_schemadisplay
 
 BuildRequires:   python-webhelpers
@@ -151,7 +147,6 @@ Requires:   python-pyramid-fas-openid
 Requires:   packagedb-cli
 
 Requires:   python-sqlalchemy
-Requires:   python-zope-sqlalchemy
 
 Requires:   python-webhelpers
 Requires:   python-progressbar
@@ -216,9 +211,6 @@ updates for a software distribution.
 %prep
 %setup -q -n bodhi-%{version}
 
-%patch0 -p1
-%patch1 -p1
-
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
 sed -i '/pyramid_debugtoolbar/d' development.ini.example
@@ -278,15 +270,6 @@ if [ ! -e %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap ]; then
     /usr/bin/false
 fi;
 
-# Patch2 breaks the unit tests, but in a way that is expected an OK. We will skip the tests for
-# bodhi-2.5.0.
-if [ "%{version}" == "2.5.0" ]; then
-    exit 0;
-fi
-
-echo "REMOVE THIS AND THE ABOVE IF STATEMENT WHEN THE VERSION IS NOT 2.5.0 ANYMORE!"
-exit 1;
-
 PYTHONPATH=. %{__python2} setup.py nosetests
 
 
@@ -341,6 +324,10 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Mon Apr 17 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.6.0-1
+- Update to 2.6.0.
+- https://github.com/fedora-infra/bodhi/releases/tag/2.6.0
+
 * Mon Apr 10 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.5.0-2
 - Apply a patch to fix https://github.com/fedora-infra/bodhi/issues/1423
 - Temporarily disable the tests since the patch causes two of them to fail, expectedly.
