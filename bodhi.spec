@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        2.6.0
+Version:        2.6.1
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -324,6 +324,10 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Mon May 01 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.6.1-1
+- Update to 2.6.1 (#1447149).
+- https://github.com/fedora-infra/bodhi/releases/tag/2.6.1
+
 * Mon Apr 17 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.6.0-1
 - Update to 2.6.0.
 - https://github.com/fedora-infra/bodhi/releases/tag/2.6.0
