@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        2.6.1
+Version:        2.6.2
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -84,7 +84,7 @@ A modular piece of the Fedora Infrastructure stack
 Summary: Bodhi Client
 Group: Applications/Internet
 Requires: koji
-Requires: python-fedora >= 0.3.5
+Requires: python-fedora >= 0.9
 Requires: python-kitchen
 Requires: python2-six
 %if 0%{?fedora} >= 26
@@ -324,6 +324,10 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Fri May 05 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.6.2-1
+- Update to 2.6.2 (#1445294).
+- https://github.com/fedora-infra/bodhi/releases/tag/2.6.2
+
 * Mon May 01 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.6.1-1
 - Update to 2.6.1 (#1447149).
 - https://github.com/fedora-infra/bodhi/releases/tag/2.6.1
