@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        2.6.2
+Version:        2.7.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -13,6 +13,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:   python2
 BuildRequires:   python2-devel
 BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
+BuildRequires:   python-alembic
 BuildRequires:   python-flake8
 BuildRequires:   python-nose
 BuildRequires:   python-webtest
@@ -219,6 +220,10 @@ sed -i '/nose-cov/d' setup.py
 # Kill this from the egg-info deps so that bodhi-server doesn't demand it.
 sed -i '/click/d' setup.py
 
+# Configure the alembic.ini config file to point to the location where we've installed the
+# migrations.
+sed -i 's:script_location = alembic:script_location = %{_datadir}/%{name}/alembic:' alembic.ini
+
 # The unit tests needs a development.ini
 mv development.ini.example development.ini
 
@@ -243,7 +248,10 @@ make %{?_smp_mflags} -C docs man
 
 %{__install} -m 644 apache/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 %{__install} -m 640 production.ini %{buildroot}%{_sysconfdir}/%{name}/production.ini
-%{__install} -m 640 alembic.ini %{buildroot}%{_datadir}/%{name}/alembic.ini
+%{__install} -m 640 alembic.ini %{buildroot}%{_sysconfdir}/%{name}/alembic.ini
+# The alembic.ini file used to be installed to datadir, so let's include a symlink for reverse
+# compatibility.
+ln -s %{_sysconfdir}/%{name}/alembic.ini %{buildroot}%{_datadir}/%{name}/alembic.ini
 cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 %{__install} apache/%{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 
@@ -310,6 +318,7 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 %{_bindir}/bodhi-push
 %{_bindir}/bodhi-untag-branched
 %{_bindir}/bodhi-manage-releases
+%config(noreplace) %{_sysconfdir}/bodhi/alembic.ini
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/bodhi.conf
 %config(noreplace) %{_sysconfdir}/fedmsg.d/*
 %dir %{_sysconfdir}/bodhi/
@@ -324,6 +333,11 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Mon May 15 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.7.0-1
+- Update to 2.7.0 (#1458342).
+- https://github.com/fedora-infra/bodhi/releases/tag/2.7.0
+- Install alembic.ini as a config file (#1451091).
+
 * Fri May 05 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.6.2-1
 - Update to 2.6.2 (#1445294).
 - https://github.com/fedora-infra/bodhi/releases/tag/2.6.2
