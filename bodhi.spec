@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.7.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -249,9 +249,6 @@ make %{?_smp_mflags} -C docs man
 %{__install} -m 644 apache/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 %{__install} -m 640 production.ini %{buildroot}%{_sysconfdir}/%{name}/production.ini
 %{__install} -m 640 alembic.ini %{buildroot}%{_sysconfdir}/%{name}/alembic.ini
-# The alembic.ini file used to be installed to datadir, so let's include a symlink for reverse
-# compatibility.
-ln -s %{_sysconfdir}/%{name}/alembic.ini %{buildroot}%{_datadir}/%{name}/alembic.ini
 cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 %{__install} apache/%{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 
@@ -333,6 +330,9 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Wed Jun 07 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.7.0-2
+- Drop the alembic.ini symlink in /usr/share since it is not needed.
+
 * Mon May 15 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.7.0-1
 - Update to 2.7.0 (#1458342).
 - https://github.com/fedora-infra/bodhi/releases/tag/2.7.0
