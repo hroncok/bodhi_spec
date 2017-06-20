@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        2.7.0
-Release:        2%{?dist}
+Version:        2.8.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -20,6 +20,7 @@ BuildRequires:   python-webtest
 BuildRequires:   python-mock
 
 # For the app
+BuildRequires:   python2-bleach
 BuildRequires:   python-pyramid
 BuildRequires:   python-pyramid-mako
 BuildRequires:   python-pyramid-tm
@@ -130,6 +131,7 @@ Requires:   python2-bodhi == %{version}-%{release}
 Requires:   httpd
 Requires:   python-psycopg2
 
+Requires:   python2-bleach
 Requires:   python2-fedmsg-atomic-composer >= 2016.3
 Requires:   python-pyramid
 Requires:   python-pyramid-mako
@@ -309,6 +311,7 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 %defattr(-,root,root,-)
 %license COPYING
 %{_bindir}/initialize_bodhi_db
+%{_bindir}/bodhi-babysit-ci
 %{_bindir}/bodhi-clean-old-mashes
 %{_bindir}/bodhi-expire-overrides
 %{_bindir}/bodhi-approve-testing
@@ -321,6 +324,8 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 %dir %{_sysconfdir}/bodhi/
 %{python2_sitelib}/%{name}/server
 %{python2_sitelib}/%{name}_server-%{version}-py%{python2_version}.egg-info
+%{_mandir}/man1/bodhi-approve-testing.1*
+%{_mandir}/man1/bodhi-babysit-ci.1*
 %{_mandir}/man1/bodhi-push.1*
 %{_mandir}/man1/initialize_bodhi_db.1*
 %attr(-,bodhi,root) %{_datadir}/%{name}
@@ -330,6 +335,10 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Tue Jun 20 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.8.0-1
+- Update to 2.8.0.
+- https://github.com/fedora-infra/bodhi/releases/tag/2.8.0
+
 * Wed Jun 07 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.7.0-2
 - Drop the alembic.ini symlink in /usr/share since it is not needed.
 
