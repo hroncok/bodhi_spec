@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -10,64 +10,55 @@ URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 # For the tests
+BuildRequires:   python-alembic
+BuildRequires:   python-cornice-sphinx
+BuildRequires:   python-webtest
 BuildRequires:   python2
 BuildRequires:   python2-devel
-BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
-BuildRequires:   python-alembic
-BuildRequires:   python-flake8
-BuildRequires:   python-nose
-BuildRequires:   python-webtest
-BuildRequires:   python-mock
-
-# For the app
-BuildRequires:   python2-bleach
-BuildRequires:   python-pyramid
-BuildRequires:   python-pyramid-mako
-BuildRequires:   python-pyramid-tm
-BuildRequires:   python-waitress
-BuildRequires:   python-colander
-BuildRequires:   python-cornice < 2
-BuildRequires:   python-cornice-sphinx
-
-BuildRequires:   python-openid
-BuildRequires:   python-pyramid-fas-openid
-BuildRequires:   packagedb-cli
-
-BuildRequires:   python-sqlalchemy
+BuildRequires:   python2-flake8
+BuildRequires:   python2-mock
+BuildRequires:   python2-nose
+BuildRequires:   python2-sphinx
 BuildRequires:   python2-sqlalchemy_schemadisplay
 
-BuildRequires:   python-webhelpers
-BuildRequires:   python-progressbar
-BuildRequires:   python-bunch
-
-# for captchas
-BuildRequires:   python-cryptography
-BuildRequires:   python-pillow
-BuildRequires:   liberation-mono-fonts
-
-# Useful tools
-BuildRequires:   python-kitchen
-BuildRequires:   python-fedora
-BuildRequires:   python-pylibravatar
-BuildRequires:   python-pydns
-BuildRequires:   python-dogpile-cache
-BuildRequires:   python-arrow
-BuildRequires:   python-markdown
-BuildRequires:   python-librepo
-BuildRequires:   python-createrepo_c
+# For the app
 BuildRequires:   createrepo_c
-
-# External resources
-BuildRequires:   python-bugzilla
-BuildRequires:   python-simplemediawiki
 BuildRequires:   fedmsg
-
-BuildRequires:   python-sphinx
+BuildRequires:   liberation-mono-fonts
+BuildRequires:   packagedb-cli
+BuildRequires:   python-bugzilla
+BuildRequires:   python-bunch
+BuildRequires:   python-cornice < 2
+BuildRequires:   python-fedora
+BuildRequires:   python-openid
+BuildRequires:   python-progressbar
+BuildRequires:   python-pydns
+BuildRequires:   python-pylibravatar
+BuildRequires:   python-pyramid
+BuildRequires:   python-pyramid-fas-openid
+BuildRequires:   python-simplemediawiki
+BuildRequires:   python-webhelpers
+BuildRequires:   python2-arrow
+BuildRequires:   python2-colander
+BuildRequires:   python2-createrepo_c
+BuildRequires:   python2-cryptography
+BuildRequires:   python2-dogpile-cache
+BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
+BuildRequires:   python2-kitchen
+BuildRequires:   python2-librepo
+BuildRequires:   python2-markdown
+BuildRequires:   python2-pillow
+BuildRequires:   python2-pyramid-mako
+BuildRequires:   python2-pyramid-tm
+BuildRequires:   python2-sqlalchemy
+BuildRequires:   python2-waitress
 
 # For the bodhi-client and push.py
 %if 0%{?fedora} >= 26
+BuildRequires:   python2-bleach
 BuildRequires:   python2-click
 %else
+BuildRequires:   python-bleach
 BuildRequires:   python-click
 %endif
 
@@ -85,17 +76,17 @@ A modular piece of the Fedora Infrastructure stack
 %package client
 Summary: Bodhi Client
 Group: Applications/Internet
+
 Requires: koji
 Requires: python-fedora >= 0.9
-Requires: python-kitchen
+Requires: python2-bodhi == %{version}-%{release}
 Requires: python2-six
+
 %if 0%{?fedora} >= 26
 Requires:   python2-click
 %else
 Requires:   python-click
 %endif
-
-Requires: python2-bodhi == %{version}-%{release}
 
 
 %description client
@@ -125,66 +116,53 @@ Common files shared by bodhi-client and bodhi-server.
 Summary: A modular framework that facilitates publishing software updates
 Group: Applications/Internet
 
+Requires:   createrepo_c
+Requires:   fedmsg
 Requires:   fedmsg-base
-Requires:   mod_wsgi
-Requires:   python2-bodhi == %{version}-%{release}
+Requires:   git
 Requires:   httpd
-Requires:   python-psycopg2
-
-Requires:   python2-bleach
-Requires:   python2-fedmsg-atomic-composer >= 2016.3
+Requires:   intltool
+Requires:   liberation-mono-fonts
+Requires:   libxml2-python
+Requires:   mash
+Requires:   mod_wsgi
+Requires:   packagedb-cli
+Requires:   python-bugzilla
+Requires:   python-bunch
+Requires:   python-cornice < 2
+Requires:   python-fedora
+Requires:   python-openid
+Requires:   python-progressbar
+Requires:   python-pydns
+Requires:   python-pylibravatar
 Requires:   python-pyramid
-Requires:   python-pyramid-mako
-Requires:   python-pyramid-tm
-Requires:   python-waitress
+Requires:   python-pyramid-fas-openid
+Requires:   python-simplemediawiki
+Requires:   python-webhelpers
+Requires:   python2-arrow
+Requires:   python2-bodhi == %{version}-%{release}
+Requires:   python2-colander
+Requires:   python2-createrepo_c
+Requires:   python2-cryptography
+Requires:   python2-dogpile-cache
+Requires:   python2-fedmsg-atomic-composer >= 2016.3
+Requires:   python2-kitchen
+Requires:   python2-librepo
+Requires:   python2-markdown
+Requires:   python2-pillow
+Requires:   python2-psycopg2
+Requires:   python2-pyramid-mako
+Requires:   python2-pyramid-tm
+Requires:   python2-sqlalchemy
+Requires:   python2-waitress
+
 %if 0%{?fedora} >= 26
+Requires:   python2-bleach
 Requires:   python2-click
 %else
+Requires:   python-bleach
 Requires:   python-click
 %endif
-Requires:   python-colander
-Requires:   python-cornice < 2
-
-Requires:   python-openid
-Requires:   python-pyramid-fas-openid
-Requires:   packagedb-cli
-
-Requires:   python-sqlalchemy
-
-Requires:   python-webhelpers
-Requires:   python-progressbar
-Requires:   python-bunch
-
-# for captchas
-Requires:   python-cryptography
-Requires:   python-pillow
-Requires:   liberation-mono-fonts
-
-# Useful tools
-Requires:   python-kitchen
-Requires:   python-fedora
-Requires:   python-pylibravatar
-Requires:   python-pydns
-Requires:   python-dogpile-cache
-Requires:   python-arrow
-Requires:   python-markdown
-Requires:   python-librepo
-Requires:   python-createrepo_c
-Requires:   createrepo_c
-
-# External resources
-Requires:   python-bugzilla
-Requires:   python-simplemediawiki
-Requires:   fedmsg
-
-# For cloning comps
-Requires:  git
-Requires:  libxml2-python
-Requires:  intltool
-
-Requires:  mash
-
-Requires:   python-sphinx
 
 Provides:  bundled(aajohan-comfortaa-fonts)
 Provides:  bundled(abattis-cantarell-fonts)
@@ -335,6 +313,12 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Tue Jun 20 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.8.0-2
+- Use python2- versions of dependencies where available.
+- Rearrange dependencies alphabetically.
+- Drop client requirement on kitchen, since it doesn't use it.
+- Drop server requirement on sphinx, since it doesn't use it.
+
 * Tue Jun 20 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.8.0-1
 - Update to 2.8.0.
 - https://github.com/fedora-infra/bodhi/releases/tag/2.8.0
