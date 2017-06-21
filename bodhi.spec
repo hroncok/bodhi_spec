@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        2.8.0
-Release:        2%{?dist}
+Version:        2.8.1
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -8,6 +8,7 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+
 
 # For the tests
 BuildRequires:   python-alembic
@@ -38,28 +39,34 @@ BuildRequires:   python-pyramid
 BuildRequires:   python-pyramid-fas-openid
 BuildRequires:   python-simplemediawiki
 BuildRequires:   python-webhelpers
-BuildRequires:   python2-arrow
 BuildRequires:   python2-colander
 BuildRequires:   python2-createrepo_c
 BuildRequires:   python2-cryptography
-BuildRequires:   python2-dogpile-cache
 BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
-BuildRequires:   python2-kitchen
 BuildRequires:   python2-librepo
 BuildRequires:   python2-markdown
 BuildRequires:   python2-pillow
-BuildRequires:   python2-pyramid-mako
-BuildRequires:   python2-pyramid-tm
-BuildRequires:   python2-sqlalchemy
 BuildRequires:   python2-waitress
 
 # For the bodhi-client and push.py
 %if 0%{?fedora} >= 26
+BuildRequires:   python2-arrow
 BuildRequires:   python2-bleach
 BuildRequires:   python2-click
+BuildRequires:   python2-dogpile-cache
+BuildRequires:   python2-kitchen
+BuildRequires:   python2-pyramid-mako
+BuildRequires:   python2-pyramid-tm
+BuildRequires:   python2-sqlalchemy
 %else
+BuildRequires:   python-arrow
 BuildRequires:   python-bleach
 BuildRequires:   python-click
+BuildRequires:   python-dogpile-cache
+BuildRequires:   python-kitchen
+BuildRequires:   python-pyramid-mako
+BuildRequires:   python-pyramid-tm
+BuildRequires:   python-sqlalchemy
 %endif
 
 
@@ -139,29 +146,35 @@ Requires:   python-pyramid
 Requires:   python-pyramid-fas-openid
 Requires:   python-simplemediawiki
 Requires:   python-webhelpers
-Requires:   python2-arrow
 Requires:   python2-bodhi == %{version}-%{release}
 Requires:   python2-colander
 Requires:   python2-createrepo_c
 Requires:   python2-cryptography
-Requires:   python2-dogpile-cache
 Requires:   python2-fedmsg-atomic-composer >= 2016.3
-Requires:   python2-kitchen
 Requires:   python2-librepo
 Requires:   python2-markdown
 Requires:   python2-pillow
 Requires:   python2-psycopg2
-Requires:   python2-pyramid-mako
-Requires:   python2-pyramid-tm
-Requires:   python2-sqlalchemy
 Requires:   python2-waitress
 
 %if 0%{?fedora} >= 26
+Requires:   python2-arrow
 Requires:   python2-bleach
 Requires:   python2-click
+Requires:   python2-dogpile-cache
+Requires:   python2-kitchen
+Requires:   python2-pyramid-mako
+Requires:   python2-pyramid-tm
+Requires:   python2-sqlalchemy
 %else
+Requires:   python-arrow
 Requires:   python-bleach
 Requires:   python-click
+Requires:   python-dogpile-cache
+Requires:   python-kitchen
+Requires:   python-pyramid-mako
+Requires:   python-pyramid-tm
+Requires:   python-sqlalchemy
 %endif
 
 Provides:  bundled(aajohan-comfortaa-fonts)
@@ -313,6 +326,11 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Wed Jun 21 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.8.1-1
+- Update to 2.8.1.
+- https://github.com/fedora-infra/bodhi/releases/tag/2.8.1
+- Make a few of the python2- dependencies be python- again for F24-25.
+
 * Tue Jun 20 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.8.0-2
 - Use python2- versions of dependencies where available.
 - Rearrange dependencies alphabetically.
