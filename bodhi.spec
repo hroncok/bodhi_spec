@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.8.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -326,6 +326,9 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.8.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Wed Jun 21 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.8.1-1
 - Update to 2.8.1.
 - https://github.com/fedora-infra/bodhi/releases/tag/2.8.1
