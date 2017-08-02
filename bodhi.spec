@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        2.8.1
-Release:        2%{?dist}
+Version:        2.9.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -9,27 +9,15 @@ Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-
-# For the tests
-BuildRequires:   python-alembic
-BuildRequires:   python-cornice-sphinx
-BuildRequires:   python-webtest
-BuildRequires:   python2
-BuildRequires:   python2-devel
-BuildRequires:   python2-flake8
-BuildRequires:   python2-mock
-BuildRequires:   python2-nose
-BuildRequires:   python2-sphinx
-BuildRequires:   python2-sqlalchemy_schemadisplay
-
-# For the app
 BuildRequires:   createrepo_c
 BuildRequires:   fedmsg
 BuildRequires:   liberation-mono-fonts
 BuildRequires:   packagedb-cli
+BuildRequires:   python-alembic
 BuildRequires:   python-bugzilla
 BuildRequires:   python-bunch
 BuildRequires:   python-cornice < 2
+BuildRequires:   python-cornice-sphinx
 BuildRequires:   python-fedora
 BuildRequires:   python-openid
 BuildRequires:   python-progressbar
@@ -37,18 +25,34 @@ BuildRequires:   python-pydns
 BuildRequires:   python-pylibravatar
 BuildRequires:   python-pyramid
 BuildRequires:   python-pyramid-fas-openid
+BuildRequires:   python-pytest-cov
 BuildRequires:   python-simplemediawiki
+BuildRequires:   python-urlgrabber
 BuildRequires:   python-webhelpers
+BuildRequires:   python-webtest
+BuildRequires:   python2
 BuildRequires:   python2-colander
 BuildRequires:   python2-createrepo_c
 BuildRequires:   python2-cryptography
+BuildRequires:   python2-devel
 BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
+BuildRequires:   python2-flake8
 BuildRequires:   python2-librepo
 BuildRequires:   python2-markdown
+BuildRequires:   python2-mock
 BuildRequires:   python2-pillow
+BuildRequires:   python2-pytest
+BuildRequires:   python2-sphinx
+BuildRequires:   python2-sqlalchemy_schemadisplay
+BuildRequires:   python2-virtualenv
 BuildRequires:   python2-waitress
 
-# For the bodhi-client and push.py
+%if 0%{?fedora} >= 25
+BuildRequires:   python2-koji
+%else
+BuildRequires:   koji
+%endif
+
 %if 0%{?fedora} >= 26
 BuildRequires:   python2-arrow
 BuildRequires:   python2-bleach
@@ -84,10 +88,17 @@ A modular piece of the Fedora Infrastructure stack
 Summary: Bodhi Client
 Group: Applications/Internet
 
-Requires: koji
+Requires: bash-completion
+Requires: python-dnf
 Requires: python-fedora >= 0.9
 Requires: python2-bodhi == %{version}-%{release}
 Requires: python2-six
+
+%if 0%{?fedora} >= 27
+Requires: python2-koji
+%else
+Requires: koji
+%endif
 
 %if 0%{?fedora} >= 26
 Requires:   python2-click
@@ -145,6 +156,7 @@ Requires:   python-pylibravatar
 Requires:   python-pyramid
 Requires:   python-pyramid-fas-openid
 Requires:   python-simplemediawiki
+Requires:   python-urlgrabber
 Requires:   python-webhelpers
 Requires:   python2-bodhi == %{version}-%{release}
 Requires:   python2-colander
@@ -156,6 +168,12 @@ Requires:   python2-markdown
 Requires:   python2-pillow
 Requires:   python2-psycopg2
 Requires:   python2-waitress
+
+%if 0%{?fedora} >= 27
+Requires:   python2-koji
+%else
+Requires:   koji
+%endif
 
 %if 0%{?fedora} >= 26
 Requires:   python2-arrow
@@ -191,7 +209,7 @@ Provides:  bundled(js-jquery)
 Provides:  bundled(js-jquery) = 1.10.2
 Provides:  bundled(js-messenger)
 Provides:  bundled(js-moment)
-Provides:  bundled(js-typeahead.js) = 0.10.2
+Provides:  bundled(js-typeahead.js) = 1.1.1
 Provides:  bundled(nodejs-flot)
 Provides:  bundled(open-sans-fonts)
 Provides:  bundled(xstatic-bootstrap-datepicker-common)
@@ -208,7 +226,6 @@ updates for a software distribution.
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
 sed -i '/pyramid_debugtoolbar/d' development.ini.example
-sed -i '/nose-cov/d' setup.py
 
 # Kill this from the egg-info deps so that bodhi-server doesn't demand it.
 sed -i '/click/d' setup.py
@@ -233,12 +250,14 @@ make %{?_smp_mflags} -C docs man
 
 %{__mkdir_p} %{buildroot}/var/lib/bodhi
 %{__mkdir_p} %{buildroot}/var/cache/bodhi
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/bash_completion.d
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/httpd/conf.d
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/fedmsg.d
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/bodhi
 %{__mkdir_p} %{buildroot}%{_datadir}/%{name}
 %{__mkdir_p} -m 0755 %{buildroot}/%{_localstatedir}/log/bodhi
 
+%{__install} -m 0755 bodhi-complete.sh %{buildroot}%{_sysconfdir}/bash_completion.d
 %{__install} -m 644 apache/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 %{__install} -m 640 production.ini %{buildroot}%{_sysconfdir}/%{name}/production.ini
 %{__install} -m 640 alembic.ini %{buildroot}%{_sysconfdir}/%{name}/alembic.ini
@@ -268,7 +287,11 @@ if [ ! -e %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap ]; then
     /usr/bin/false
 fi;
 
-PYTHONPATH=. %{__python2} setup.py nosetests
+# The tests need bodhi to be installed to pass. Let's build a virtualenv so we can install bodhi
+# there.
+virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
+.test-virtualenv/bin/python2 setup.py develop
+.test-virtualenv/bin/python2 /usr/bin/py.test
 
 
 %pre server
@@ -280,6 +303,7 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 %files client
 %defattr(-,root,root,-)
 %license COPYING
+%{_sysconfdir}/bash_completion.d/bodhi-complete.sh
 %{_bindir}/bodhi
 %{python2_sitelib}/%{name}/client
 %{python2_sitelib}/%{name}_client-%{version}-py%{python2_version}.egg-info
@@ -326,6 +350,11 @@ PYTHONPATH=. %{__python2} setup.py nosetests
 
 
 %changelog
+* Wed Aug 02 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.0-1
+- Update to 2.9.0 (#1477579).
+- https://github.com/fedora-infra/bodhi/releases/tag/2.9.0
+- Lexigraphically sort dependencies.
+
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.8.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
