@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.9.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -16,14 +16,10 @@ BuildRequires:   packagedb-cli
 BuildRequires:   python-alembic
 BuildRequires:   python-bugzilla
 BuildRequires:   python-bunch
-BuildRequires:   python-cornice < 2
-BuildRequires:   python-cornice-sphinx
-BuildRequires:   python-fedora
 BuildRequires:   python-openid
 BuildRequires:   python-progressbar
 BuildRequires:   python-pydns
 BuildRequires:   python-pylibravatar
-BuildRequires:   python-pyramid
 BuildRequires:   python-pyramid-fas-openid
 BuildRequires:   python-pytest-cov
 BuildRequires:   python-simplemediawiki
@@ -32,10 +28,13 @@ BuildRequires:   python-webhelpers
 BuildRequires:   python-webtest
 BuildRequires:   python2
 BuildRequires:   python2-colander
+BuildRequires:   python2-cornice < 2
+BuildRequires:   python2-cornice-sphinx
 BuildRequires:   python2-createrepo_c
 BuildRequires:   python2-cryptography
 BuildRequires:   python2-devel
 BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
+BuildRequires:   python2-fedora
 BuildRequires:   python2-flake8
 BuildRequires:   python2-librepo
 BuildRequires:   python2-markdown
@@ -59,6 +58,7 @@ BuildRequires:   python2-bleach
 BuildRequires:   python2-click
 BuildRequires:   python2-dogpile-cache
 BuildRequires:   python2-kitchen
+BuildRequires:   python2-pyramid
 BuildRequires:   python2-pyramid-mako
 BuildRequires:   python2-pyramid-tm
 BuildRequires:   python2-sqlalchemy
@@ -68,6 +68,7 @@ BuildRequires:   python-bleach
 BuildRequires:   python-click
 BuildRequires:   python-dogpile-cache
 BuildRequires:   python-kitchen
+BuildRequires:   python-pyramid
 BuildRequires:   python-pyramid-mako
 BuildRequires:   python-pyramid-tm
 BuildRequires:   python-sqlalchemy
@@ -89,9 +90,9 @@ Summary: Bodhi Client
 Group: Applications/Internet
 
 Requires: bash-completion
-Requires: python-dnf
-Requires: python-fedora >= 0.9
 Requires: python2-bodhi == %{version}-%{release}
+Requires: python2-dnf
+Requires: python2-fedora >= 0.9
 Requires: python2-six
 
 %if 0%{?fedora} >= 27
@@ -147,22 +148,21 @@ Requires:   mod_wsgi
 Requires:   packagedb-cli
 Requires:   python-bugzilla
 Requires:   python-bunch
-Requires:   python-cornice < 2
-Requires:   python-fedora
 Requires:   python-openid
 Requires:   python-progressbar
 Requires:   python-pydns
 Requires:   python-pylibravatar
-Requires:   python-pyramid
 Requires:   python-pyramid-fas-openid
 Requires:   python-simplemediawiki
 Requires:   python-urlgrabber
 Requires:   python-webhelpers
 Requires:   python2-bodhi == %{version}-%{release}
 Requires:   python2-colander
+Requires:   python2-cornice < 2
 Requires:   python2-createrepo_c
 Requires:   python2-cryptography
 Requires:   python2-fedmsg-atomic-composer >= 2016.3
+Requires:   python2-fedora
 Requires:   python2-librepo
 Requires:   python2-markdown
 Requires:   python2-pillow
@@ -181,6 +181,7 @@ Requires:   python2-bleach
 Requires:   python2-click
 Requires:   python2-dogpile-cache
 Requires:   python2-kitchen
+Requires:   python2-pyramid
 Requires:   python2-pyramid-mako
 Requires:   python2-pyramid-tm
 Requires:   python2-sqlalchemy
@@ -190,6 +191,7 @@ Requires:   python-bleach
 Requires:   python-click
 Requires:   python-dogpile-cache
 Requires:   python-kitchen
+Requires:   python-pyramid
 Requires:   python-pyramid-mako
 Requires:   python-pyramid-tm
 Requires:   python-sqlalchemy
@@ -350,6 +352,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Thu Aug 03 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.0-2
+- Use python2- dependencies where appropriate.
+
 * Wed Aug 02 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.0-1
 - Update to 2.9.0 (#1477579).
 - https://github.com/fedora-infra/bodhi/releases/tag/2.9.0
