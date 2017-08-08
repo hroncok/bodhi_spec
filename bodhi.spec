@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.9.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -89,7 +89,7 @@ A modular piece of the Fedora Infrastructure stack
 Summary: Bodhi Client
 Group: Applications/Internet
 
-Requires: bash-completion
+Requires: filesystem
 Requires: python2-bodhi == %{version}-%{release}
 Requires: python2-dnf
 Requires: python2-fedora >= 0.9
@@ -352,6 +352,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Aug 08 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.0-3
+- Depend on filesystem instead of bash-completion (#1479341).
+
 * Thu Aug 03 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.0-2
 - Use python2- dependencies where appropriate.
 
