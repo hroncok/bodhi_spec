@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.9.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -135,6 +135,7 @@ Common files shared by bodhi-client and bodhi-server.
 Summary: A modular framework that facilitates publishing software updates
 Group: Applications/Internet
 
+Requires:   bodhi-client == %{version}-%{release}
 Requires:   createrepo_c
 Requires:   fedmsg
 Requires:   fedmsg-base
@@ -352,6 +353,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Aug 08 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.0-4
+- bodhi-server now depends on bodhi-client for some of its CLI tools (#1479456).
+
 * Tue Aug 08 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.0-3
 - Depend on filesystem instead of bash-completion (#1479341).
 
