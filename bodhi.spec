@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        2.9.0
-Release:        4%{?dist}
+Version:        2.9.1
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -8,6 +8,10 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+%if 0%{?fedora} > 26
+# Needed until https://github.com/fedora-infra/bodhi/issues/1756 is fixed.
+Patch0:         0000-Patch-the-tests-for-CVE-2017-1002152-to-pass-with-bl.patch
+%endif
 
 BuildRequires:   createrepo_c
 BuildRequires:   fedmsg
@@ -224,7 +228,7 @@ updates for a software distribution.
 
 
 %prep
-%setup -q -n bodhi-%{version}
+%autosetup -p1 -n bodhi-%{version}
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
@@ -353,6 +357,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Aug 15 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.1-1
+- Update to 2.9.1, which fixes CVE-2017-1002152 (#1478587).
+- https://github.com/fedora-infra/bodhi/releases/tag/2.9.1
+
 * Tue Aug 08 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.0-4
 - bodhi-server now depends on bodhi-client for some of its CLI tools (#1479456).
 
