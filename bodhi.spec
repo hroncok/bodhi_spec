@@ -333,7 +333,7 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %defattr(-,root,root,-)
 %license COPYING
 %{_bindir}/initialize_bodhi_db
-%{_bindir}/bodhi-babysit-ci
+%{_bindir}/bodhi-check-policies
 %{_bindir}/bodhi-clean-old-mashes
 %{_bindir}/bodhi-expire-overrides
 %{_bindir}/bodhi-approve-testing
