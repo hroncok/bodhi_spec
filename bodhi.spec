@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        2.9.1
+Version:        2.10.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -8,10 +8,6 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-%if 0%{?fedora} > 26
-# Needed until https://github.com/fedora-infra/bodhi/issues/1756 is fixed.
-Patch0:         0000-Patch-the-tests-for-CVE-2017-1002152-to-pass-with-bl.patch
-%endif
 
 BuildRequires:   createrepo_c
 BuildRequires:   fedmsg
@@ -37,9 +33,11 @@ BuildRequires:   python2-cornice-sphinx
 BuildRequires:   python2-createrepo_c
 BuildRequires:   python2-cryptography
 BuildRequires:   python2-devel
+BuildRequires:   python2-dnf
 BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
 BuildRequires:   python2-fedora
 BuildRequires:   python2-flake8
+BuildRequires:   python2-iniparse
 BuildRequires:   python2-librepo
 BuildRequires:   python2-markdown
 BuildRequires:   python2-mock
@@ -97,6 +95,8 @@ Requires: filesystem
 Requires: python2-bodhi == %{version}-%{release}
 Requires: python2-dnf
 Requires: python2-fedora >= 0.9
+Requires: python2-kitchen
+Requires: python2-iniparse
 Requires: python2-six
 
 %if 0%{?fedora} >= 27
@@ -347,7 +347,7 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %{python2_sitelib}/%{name}/server
 %{python2_sitelib}/%{name}_server-%{version}-py%{python2_version}.egg-info
 %{_mandir}/man1/bodhi-approve-testing.1*
-%{_mandir}/man1/bodhi-babysit-ci.1*
+%{_mandir}/man1/bodhi-check-policies.1*
 %{_mandir}/man1/bodhi-push.1*
 %{_mandir}/man1/initialize_bodhi_db.1*
 %attr(-,bodhi,root) %{_datadir}/%{name}
@@ -357,6 +357,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Fri Aug 18 2017 Jeremy Cline <jeremy@jcline.org> - 2.10.0-1
+- Update to 2.10.0
+- https://github.com/fedora-infra/bodhi/releases/tag/2.10.0
+
 * Tue Aug 15 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.9.1-1
 - Update to 2.9.1, which fixes CVE-2017-1002152 (#1478587).
 - https://github.com/fedora-infra/bodhi/releases/tag/2.9.1
