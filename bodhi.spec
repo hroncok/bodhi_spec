@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        2.10.0
+Version:        2.10.1
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -357,6 +357,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Aug 22 2017 Jeremy Cline <jeremy@jcline.org> - 2.10.1-1
+- Update to 2.10.1
+- https://github.com/fedora-infra/bodhi/releases/tag/2.10.1
+
 * Fri Aug 18 2017 Jeremy Cline <jeremy@jcline.org> - 2.10.0-1
 - Update to 2.10.0
 - https://github.com/fedora-infra/bodhi/releases/tag/2.10.0
