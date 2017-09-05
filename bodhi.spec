@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.10.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -17,11 +17,9 @@ BuildRequires:   python-alembic
 BuildRequires:   python-bugzilla
 BuildRequires:   python-bunch
 BuildRequires:   python-openid
-BuildRequires:   python-progressbar
 BuildRequires:   python-pydns
 BuildRequires:   python-pylibravatar
 BuildRequires:   python-pyramid-fas-openid
-BuildRequires:   python-pytest-cov
 BuildRequires:   python-simplemediawiki
 BuildRequires:   python-urlgrabber
 BuildRequires:   python-webhelpers
@@ -42,7 +40,9 @@ BuildRequires:   python2-librepo
 BuildRequires:   python2-markdown
 BuildRequires:   python2-mock
 BuildRequires:   python2-pillow
+BuildRequires:   python2-progressbar
 BuildRequires:   python2-pytest
+BuildRequires:   python2-pytest-cov
 BuildRequires:   python2-sphinx
 BuildRequires:   python2-sqlalchemy_schemadisplay
 BuildRequires:   python2-virtualenv
@@ -154,7 +154,6 @@ Requires:   packagedb-cli
 Requires:   python-bugzilla
 Requires:   python-bunch
 Requires:   python-openid
-Requires:   python-progressbar
 Requires:   python-pydns
 Requires:   python-pylibravatar
 Requires:   python-pyramid-fas-openid
@@ -171,6 +170,7 @@ Requires:   python2-fedora
 Requires:   python2-librepo
 Requires:   python2-markdown
 Requires:   python2-pillow
+Requires:   python2-progressbar
 Requires:   python2-psycopg2
 Requires:   python2-waitress
 
@@ -357,6 +357,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Sep 05 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.10.1-3
+- Use python2- prefixes for progressbar and pytest-cov dependencies.
+
 * Tue Sep 05 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.10.1-2
 - Bump the release to fix the upgrade path from F26.
 
