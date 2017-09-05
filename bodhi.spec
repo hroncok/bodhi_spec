@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.10.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -357,6 +357,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Sep 05 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.10.1-2
+- Bump the release to fix the upgrade path from F26.
+
 * Tue Aug 22 2017 Jeremy Cline <jeremy@jcline.org> - 2.10.1-1
 - Update to 2.10.1
 - https://github.com/fedora-infra/bodhi/releases/tag/2.10.1
