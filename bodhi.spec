@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.10.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -12,6 +12,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:   createrepo_c
 BuildRequires:   fedmsg
 BuildRequires:   liberation-mono-fonts
+BuildRequires:   koji
 BuildRequires:   packagedb-cli
 BuildRequires:   python-alembic
 BuildRequires:   python-bugzilla
@@ -36,11 +37,11 @@ BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
 BuildRequires:   python2-fedora
 BuildRequires:   python2-flake8
 BuildRequires:   python2-iniparse
+BuildRequires:   python2-koji
 BuildRequires:   python2-librepo
 BuildRequires:   python2-markdown
 BuildRequires:   python2-mock
 BuildRequires:   python2-pillow
-BuildRequires:   python2-progressbar
 BuildRequires:   python2-pytest
 BuildRequires:   python2-pytest-cov
 BuildRequires:   python2-sphinx
@@ -48,10 +49,10 @@ BuildRequires:   python2-sqlalchemy_schemadisplay
 BuildRequires:   python2-virtualenv
 BuildRequires:   python2-waitress
 
-%if 0%{?fedora} >= 25
-BuildRequires:   python2-koji
+%if 0%{?fedora} >= 27
+BuildRequires:   python2-progressbar
 %else
-BuildRequires:   koji
+BuildRequires:   python-progressbar
 %endif
 
 %if 0%{?fedora} >= 26
@@ -92,18 +93,14 @@ Summary: Bodhi Client
 Group: Applications/Internet
 
 Requires: filesystem
+Requires: koji
 Requires: python2-bodhi == %{version}-%{release}
 Requires: python2-dnf
 Requires: python2-fedora >= 0.9
 Requires: python2-kitchen
+Requires: python2-koji
 Requires: python2-iniparse
 Requires: python2-six
-
-%if 0%{?fedora} >= 27
-Requires: python2-koji
-%else
-Requires: koji
-%endif
 
 %if 0%{?fedora} >= 26
 Requires:   python2-click
@@ -170,14 +167,14 @@ Requires:   python2-fedora
 Requires:   python2-librepo
 Requires:   python2-markdown
 Requires:   python2-pillow
-Requires:   python2-progressbar
 Requires:   python2-psycopg2
 Requires:   python2-waitress
 
 %if 0%{?fedora} >= 27
 Requires:   python2-koji
+Requires:   python2-progressbar
 %else
-Requires:   koji
+Requires:   python-progressbar
 %endif
 
 %if 0%{?fedora} >= 26
@@ -357,6 +354,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Fri Sep 15 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.10.1-4
+- The client should Require koji and python2-koji (#1488223).
+- Fix Fedora < 27 to require python-progressbar.
+
 * Tue Sep 05 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.10.1-3
 - Use python2- prefixes for progressbar and pytest-cov dependencies.
 
