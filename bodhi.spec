@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        2.10.1
-Release:        4%{?dist}
+Version:        2.11.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -97,15 +97,16 @@ Requires: koji
 Requires: python2-bodhi == %{version}-%{release}
 Requires: python2-dnf
 Requires: python2-fedora >= 0.9
-Requires: python2-kitchen
 Requires: python2-koji
 Requires: python2-iniparse
 Requires: python2-six
 
 %if 0%{?fedora} >= 26
 Requires:   python2-click
+Requires:   python2-kitchen
 %else
 Requires:   python-click
+Requires:   python-kitchen
 %endif
 
 
@@ -332,6 +333,7 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %{_bindir}/initialize_bodhi_db
 %{_bindir}/bodhi-check-policies
 %{_bindir}/bodhi-clean-old-mashes
+%{_bindir}/bodhi-dequeue-stable
 %{_bindir}/bodhi-expire-overrides
 %{_bindir}/bodhi-approve-testing
 %{_bindir}/bodhi-push
@@ -354,6 +356,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Sep 19 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.11.0-1
+- Update to 2.11.0 (#1493587).
+- https://github.com/fedora-infra/bodhi/releases/tag/2.11.0
+
 * Fri Sep 15 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.10.1-4
 - The client should Require koji and python2-koji (#1488223).
 - Fix Fedora < 27 to require python-progressbar.
