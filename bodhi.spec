@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.11.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -14,17 +14,6 @@ BuildRequires:   fedmsg
 BuildRequires:   liberation-mono-fonts
 BuildRequires:   koji
 BuildRequires:   packagedb-cli
-BuildRequires:   python-alembic
-BuildRequires:   python-bugzilla
-BuildRequires:   python-bunch
-BuildRequires:   python-openid
-BuildRequires:   python-pydns
-BuildRequires:   python-pylibravatar
-BuildRequires:   python-pyramid-fas-openid
-BuildRequires:   python-simplemediawiki
-BuildRequires:   python-urlgrabber
-BuildRequires:   python-webhelpers
-BuildRequires:   python-webtest
 BuildRequires:   python2
 BuildRequires:   python2-colander
 BuildRequires:   python2-cornice < 2
@@ -48,6 +37,32 @@ BuildRequires:   python2-sphinx
 BuildRequires:   python2-sqlalchemy_schemadisplay
 BuildRequires:   python2-virtualenv
 BuildRequires:   python2-waitress
+
+%if 0%{?fedora} >= 28
+BuildRequires:   python2-alembic
+BuildRequires:   python2-bugzilla
+BuildRequires:   python2-bunch
+BuildRequires:   python2-openid
+BuildRequires:   python2-pydns
+BuildRequires:   python2-pylibravatar
+BuildRequires:   python2-pyramid-fas-openid
+BuildRequires:   python2-simplemediawiki
+BuildRequires:   python2-urlgrabber
+BuildRequires:   python2-webhelpers
+BuildRequires:   python2-webtest
+%else
+BuildRequires:   python-alembic
+BuildRequires:   python-bugzilla
+BuildRequires:   python-bunch
+BuildRequires:   python-openid
+BuildRequires:   python-pydns
+BuildRequires:   python-pylibravatar
+BuildRequires:   python-pyramid-fas-openid
+BuildRequires:   python-simplemediawiki
+BuildRequires:   python-urlgrabber
+BuildRequires:   python-webhelpers
+BuildRequires:   python-webtest
+%endif
 
 %if 0%{?fedora} >= 27
 BuildRequires:   python2-progressbar
@@ -145,19 +160,9 @@ Requires:   git
 Requires:   httpd
 Requires:   intltool
 Requires:   liberation-mono-fonts
-Requires:   libxml2-python
 Requires:   mash
 Requires:   mod_wsgi
 Requires:   packagedb-cli
-Requires:   python-bugzilla
-Requires:   python-bunch
-Requires:   python-openid
-Requires:   python-pydns
-Requires:   python-pylibravatar
-Requires:   python-pyramid-fas-openid
-Requires:   python-simplemediawiki
-Requires:   python-urlgrabber
-Requires:   python-webhelpers
 Requires:   python2-bodhi == %{version}-%{release}
 Requires:   python2-colander
 Requires:   python2-cornice < 2
@@ -170,6 +175,30 @@ Requires:   python2-markdown
 Requires:   python2-pillow
 Requires:   python2-psycopg2
 Requires:   python2-waitress
+
+%if 0%{?fedora} >= 28
+Requires:   python2-bugzilla
+Requires:   python2-bunch
+Requires:   python2-libxml2
+Requires:   python2-openid
+Requires:   python2-pydns
+Requires:   python2-pylibravatar
+Requires:   python2-pyramid-fas-openid
+Requires:   python2-simplemediawiki
+Requires:   python2-urlgrabber
+Requires:   python2-webhelpers
+%else
+Requires:   libxml2-python
+Requires:   python-bugzilla
+Requires:   python-bunch
+Requires:   python-openid
+Requires:   python-pydns
+Requires:   python-pylibravatar
+Requires:   python-pyramid-fas-openid
+Requires:   python-simplemediawiki
+Requires:   python-urlgrabber
+Requires:   python-webhelpers
+%endif
 
 %if 0%{?fedora} >= 27
 Requires:   python2-koji
@@ -356,6 +385,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Wed Sep 20 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.11.0-2
+- Use python2- versions on several dependencies.
+
 * Tue Sep 19 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.11.0-1
 - Update to 2.11.0 (#1493587).
 - https://github.com/fedora-infra/bodhi/releases/tag/2.11.0
