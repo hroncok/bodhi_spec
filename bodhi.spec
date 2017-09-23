@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        2.11.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -8,6 +8,7 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Patch1:         0001-Retry-auth-in-the-bindings-upon-captcha-key-errors.patch
 
 BuildRequires:   createrepo_c
 BuildRequires:   fedmsg
@@ -385,6 +386,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Fri Sep 22 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.11.0-3
+- Retry auth upon captcha failures (#1494644).
+
 * Wed Sep 20 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.11.0-2
 - Use python2- versions on several dependencies.
 
