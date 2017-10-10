@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        2.11.0
-Release:        3%{?dist}
+Version:        2.12.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -386,6 +386,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Oct 10 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.12.0-1
+- Update to 2.12.0 (#1500515).
+- https://github.com/fedora-infra/bodhi/releases/tag/2.12.0
+
 * Fri Sep 22 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.11.0-3
 - Retry auth upon captcha failures (#1494644).
 
