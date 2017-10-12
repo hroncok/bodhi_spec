@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        2.12.1
+Version:        2.12.2
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -386,6 +386,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Wed Oct 11 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.12.2-1
+- Update to 2.12.2.
+- https://github.com/fedora-infra/bodhi/releases/tag/2.12.2
+
 * Wed Oct 11 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.12.1-1
 - Update to 2.12.1.
 - https://github.com/fedora-infra/bodhi/releases/tag/2.12.1
