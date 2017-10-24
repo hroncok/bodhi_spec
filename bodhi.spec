@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        2.12.2
+Version:        3.0.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -15,6 +15,7 @@ BuildRequires:   fedmsg
 BuildRequires:   liberation-mono-fonts
 BuildRequires:   koji
 BuildRequires:   packagedb-cli
+BuildRequires:   pungi
 BuildRequires:   python2
 BuildRequires:   python2-colander
 BuildRequires:   python2-cornice < 2
@@ -23,10 +24,10 @@ BuildRequires:   python2-createrepo_c
 BuildRequires:   python2-cryptography
 BuildRequires:   python2-devel
 BuildRequires:   python2-dnf
-BuildRequires:   python2-fedmsg-atomic-composer >= 2016.3
 BuildRequires:   python2-fedora
 BuildRequires:   python2-flake8
 BuildRequires:   python2-iniparse
+BuildRequires:   python2-jinja2
 BuildRequires:   python2-koji
 BuildRequires:   python2-librepo
 BuildRequires:   python2-markdown
@@ -161,16 +162,16 @@ Requires:   git
 Requires:   httpd
 Requires:   intltool
 Requires:   liberation-mono-fonts
-Requires:   mash
 Requires:   mod_wsgi
 Requires:   packagedb-cli
+Requires:   pungi
 Requires:   python2-bodhi == %{version}-%{release}
 Requires:   python2-colander
 Requires:   python2-cornice < 2
 Requires:   python2-createrepo_c
 Requires:   python2-cryptography
-Requires:   python2-fedmsg-atomic-composer >= 2016.3
 Requires:   python2-fedora
+Requires:   python2-jinja2
 Requires:   python2-librepo
 Requires:   python2-markdown
 Requires:   python2-pillow
@@ -302,9 +303,6 @@ cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 %{__install} -m 644 fedmsg.d/masher.py %{buildroot}%{_sysconfdir}/fedmsg.d/masher.py
 %{__install} -m 644 fedmsg.d/bodhi.py %{buildroot}%{_sysconfdir}/fedmsg.d/bodhi.py
 
-# We used to copy in things like this for bodhi1
-#%{__install} -m 640 %{name}/config/*mash* %{buildroot}%{_sysconfdir}/%{name}/
-
 install -d %{buildroot}%{_mandir}/man1
 install -pm0644 docs/_build/man/*.1 %{buildroot}%{_mandir}/man1/
 
@@ -386,6 +384,11 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Oct 24 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.0.0-1
+- Update to 3.0.0 (#1506021).
+- https://github.com/fedora-infra/bodhi/releases/tag/3.0.0
+- Supports non-RPM artifacts (#1352587).
+
 * Wed Oct 11 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.12.2-1
 - Update to 2.12.2.
 - https://github.com/fedora-infra/bodhi/releases/tag/2.12.2
