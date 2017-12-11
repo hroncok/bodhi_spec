@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        3.0.0
+Version:        3.1.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -8,7 +8,6 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch1:         0001-Retry-auth-in-the-bindings-upon-captcha-key-errors.patch
 
 BuildRequires:   createrepo_c
 BuildRequires:   fedmsg
@@ -25,6 +24,7 @@ BuildRequires:   python2-cryptography
 BuildRequires:   python2-devel
 BuildRequires:   python2-dnf
 BuildRequires:   python2-fedora
+BuildRequires:   python2-feedgen
 BuildRequires:   python2-flake8
 BuildRequires:   python2-iniparse
 BuildRequires:   python2-jinja2
@@ -38,31 +38,27 @@ BuildRequires:   python2-pytest-cov
 BuildRequires:   python2-sphinx
 BuildRequires:   python2-sqlalchemy_schemadisplay
 BuildRequires:   python2-virtualenv
-BuildRequires:   python2-waitress
+BuildRequires:   python2-yaml
 
 %if 0%{?fedora} >= 28
 BuildRequires:   python2-alembic
 BuildRequires:   python2-bugzilla
-BuildRequires:   python2-bunch
 BuildRequires:   python2-openid
 BuildRequires:   python2-pydns
 BuildRequires:   python2-pylibravatar
 BuildRequires:   python2-pyramid-fas-openid
 BuildRequires:   python2-simplemediawiki
 BuildRequires:   python2-urlgrabber
-BuildRequires:   python2-webhelpers
 BuildRequires:   python2-webtest
 %else
 BuildRequires:   python-alembic
 BuildRequires:   python-bugzilla
-BuildRequires:   python-bunch
 BuildRequires:   python-openid
 BuildRequires:   python-pydns
 BuildRequires:   python-pylibravatar
 BuildRequires:   python-pyramid-fas-openid
 BuildRequires:   python-simplemediawiki
 BuildRequires:   python-urlgrabber
-BuildRequires:   python-webhelpers
 BuildRequires:   python-webtest
 %endif
 
@@ -171,6 +167,7 @@ Requires:   python2-cornice < 2
 Requires:   python2-createrepo_c
 Requires:   python2-cryptography
 Requires:   python2-fedora
+Requires:   python2-feedgen
 Requires:   python2-jinja2
 Requires:   python2-librepo
 Requires:   python2-markdown
@@ -179,8 +176,8 @@ Requires:   python2-psycopg2
 Requires:   python2-waitress
 
 %if 0%{?fedora} >= 28
+Requires:   python2-alembic
 Requires:   python2-bugzilla
-Requires:   python2-bunch
 Requires:   python2-libxml2
 Requires:   python2-openid
 Requires:   python2-pydns
@@ -188,18 +185,16 @@ Requires:   python2-pylibravatar
 Requires:   python2-pyramid-fas-openid
 Requires:   python2-simplemediawiki
 Requires:   python2-urlgrabber
-Requires:   python2-webhelpers
 %else
 Requires:   libxml2-python
+Requires:   python-alembic
 Requires:   python-bugzilla
-Requires:   python-bunch
 Requires:   python-openid
 Requires:   python-pydns
 Requires:   python-pylibravatar
 Requires:   python-pyramid-fas-openid
 Requires:   python-simplemediawiki
 Requires:   python-urlgrabber
-Requires:   python-webhelpers
 %endif
 
 %if 0%{?fedora} >= 27
@@ -261,17 +256,13 @@ updates for a software distribution.
 
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
-sed -i '/pyramid_debugtoolbar/d' development.ini.example
+sed -i '/pyramid_debugtoolbar/d' devel/development.ini.example
 
 # Kill this from the egg-info deps so that bodhi-server doesn't demand it.
 sed -i '/click/d' setup.py
 
-# Configure the alembic.ini config file to point to the location where we've installed the
-# migrations.
-sed -i 's:script_location = alembic:script_location = %{_datadir}/%{name}/alembic:' alembic.ini
-
 # The unit tests needs a development.ini
-mv development.ini.example development.ini
+mv devel/development.ini.example development.ini
 
 
 %build
@@ -297,7 +288,6 @@ make %{?_smp_mflags} -C docs man
 %{__install} -m 644 apache/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 %{__install} -m 640 production.ini %{buildroot}%{_sysconfdir}/%{name}/production.ini
 %{__install} -m 640 alembic.ini %{buildroot}%{_sysconfdir}/%{name}/alembic.ini
-cp -rf alembic/ %{buildroot}%{_datadir}/%{name}/alembic
 %{__install} apache/%{name}.wsgi %{buildroot}%{_datadir}/%{name}/%{name}.wsgi
 
 %{__install} -m 644 fedmsg.d/masher.py %{buildroot}%{_sysconfdir}/fedmsg.d/masher.py
@@ -375,6 +365,7 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %{python2_sitelib}/%{name}_server-%{version}-py%{python2_version}.egg-info
 %{_mandir}/man1/bodhi-approve-testing.1*
 %{_mandir}/man1/bodhi-check-policies.1*
+%{_mandir}/man1/bodhi-clean-old-mashes.1*
 %{_mandir}/man1/bodhi-push.1*
 %{_mandir}/man1/initialize_bodhi_db.1*
 %attr(-,bodhi,root) %{_datadir}/%{name}
@@ -384,6 +375,11 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Oct 31 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.1.0-1
+- Update to 3.1.0.
+- https://github.com/fedora-infra/bodhi/releases/tag/3.1.0
+- Require alembic in the server package (#1493678).
+
 * Tue Oct 24 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.0.0-1
 - Update to 3.0.0 (#1506021).
 - https://github.com/fedora-infra/bodhi/releases/tag/3.0.0
