@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        3.1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -9,6 +9,7 @@ Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         0001-Correct-the-help-text-to-remove-spaces-betwen-builds.patch
+Patch1:		bodhi-moveshelve.patch
 
 BuildRequires:   createrepo_c
 BuildRequires:   fedmsg
@@ -376,6 +377,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Fri Jan 05 2018 Patrick Uiterwijk <patrick@puiterwijk.org> - 3.1.0-3
+- Apply patch to move the shelves
+
 * Tue Dec 12 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.1.0-2
 - Correct bodhi-client's help text to show the correct syntax for multi-build
   updates (#1515766).
