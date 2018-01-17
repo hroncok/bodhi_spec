@@ -8,6 +8,7 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Patch1:		    bodhi-moveshelve.patch
 
 BuildRequires: %{py2_dist alembic}
 BuildRequires: %{py2_dist arrow}
@@ -303,10 +304,13 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
-* Tue Dec 19 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.2.0-1
+* Wed Jan 17 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.2.0-1
 - Update to 3.2.0.
 - Use the fancy new py2_dist macro for dependencies.
 - Fix a FTBFS (#1530245).
+
+* Fri Jan 05 2018 Patrick Uiterwijk <patrick@puiterwijk.org> - 3.1.0-3
+- Apply patch to move the shelves
 
 * Tue Dec 12 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.1.0-2
 - Correct bodhi-client's help text to show the correct syntax for multi-build

@@ -1,0 +1,12 @@
+diff -rup bodhi-3.1.0.orig/bodhi/server/metadata.py bodhi-3.1.0/bodhi/server/metadata.py
+--- bodhi-3.1.0.orig/bodhi/server/metadata.py	2018-01-05 13:30:26.023231785 +0100
++++ bodhi-3.1.0/bodhi/server/metadata.py	2018-01-05 13:31:04.346162830 +0100
+@@ -87,7 +87,7 @@ class UpdateInfoMetadata(object):
+         self.updates = set()
+         self.builds = {}
+         self._from = config.get('bodhi_email')
+-        self.shelf = shelve.open(os.path.join(mashdir, '%s.shelve' % self.tag))
++        self.shelf = shelve.open('/var/cache/bodhi/%s.shelve' % self.tag)
+         self._fetch_updates()
+ 
+         self.uinfo = cr.UpdateInfo()
