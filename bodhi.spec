@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        3.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -303,6 +303,9 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Wed Jan 17 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.2.0-1
 - Update to 3.2.0.
 - Use the fancy new py2_dist macro for dependencies.
