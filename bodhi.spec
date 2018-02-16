@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        3.2.0
-Release:        2%{?dist}
+Version:        3.3.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -289,12 +289,7 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %dir %{_sysconfdir}/bodhi/
 %{python2_sitelib}/%{name}/server
 %{python2_sitelib}/%{name}_server-%{version}-py%{python2_version}.egg-info
-%{_mandir}/man1/bodhi-approve-testing.1*
-%{_mandir}/man1/bodhi-check-policies.1*
-%{_mandir}/man1/bodhi-clean-old-mashes.1*
-%{_mandir}/man1/bodhi-dequeue-stable.1*
-%{_mandir}/man1/bodhi-monitor-composes.1*
-%{_mandir}/man1/bodhi-push.1*
+%{_mandir}/man1/bodhi-*.1*
 %{_mandir}/man1/initialize_bodhi_db.1*
 %attr(-,bodhi,root) %{_datadir}/%{name}
 %attr(-,bodhi,bodhi) %config(noreplace) %{_sysconfdir}/bodhi/*
@@ -303,6 +298,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Fri Feb 16 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.3.0-1
+- Update to 3.3.0.
+- https://bodhi.fedoraproject.org/docs/release_notes.html#v3-3-0
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.2.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
@@ -441,24 +440,3 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 * Fri Mar 10 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.4.0-2
 - Apply a patch to workaround https://github.com/fedora-infra/bodhi/issues/1343 until a true fix is
   available.
-
-* Mon Feb 06 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.4.0-1
-- Update to 2.4.0.
-- Drop some unneeded globals from the top of the spec file.
-- https://github.com/fedora-infra/bodhi/releases/tag/2.4.0
-
-* Mon Feb 06 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-5
-- Apply patches to fix repeat e-mails (#1396689).
-
-* Mon Jan 30 2017 Jeremy Cline <jeremy@jcline.org> - 2.3.3-4
-- Apply a patch that fixes one of the hotfixes applied in 2.3.3-3
-
-* Fri Jan 13 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-3
-- Apply four patches from git that are currently hotfixed on
-  bodhi.fedoraproject.org.
-- Conditionally depend on python-click or python2-click, since Fedora
-  24 doesn't have python2-click.
-
-* Sun Jan 08 2017 Randy Barlow <bowlofeggs@fedoraproject.org> - 2.3.3-2
-- Require python2-click instead of python-click (#1411141).
-- Backport a unit test patch so the tests will pass in 2017.
