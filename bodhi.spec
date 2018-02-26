@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        3.3.0
+Version:        3.4.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -156,13 +156,13 @@ Provides:  bundled(abattis-cantarell-fonts)
 Provides:  bundled(bootstrap) = 3.0.1
 Provides:  bundled(bootstrap) = 3.0.2
 Provides:  bundled(bootstrap) = 3.1.1
-Provides:  bunfled(chrissimpkins-hack-fonts)
+Provides:  bundled(chrissimpkins-hack-fonts)
 Provides:  bundled(fedora-bootstrap) = 1.0.1
 Provides:  bundled(fontawesome-fonts-web) = 4.4.0
 Provides:  bundled(js-chart)
 Provides:  bundled(js-excanvas)
-Provides:  bundled(js-jquery)
 Provides:  bundled(js-jquery) = 1.10.2
+Provides:  bundled(js-jquery) = 2.0.3
 Provides:  bundled(js-messenger)
 Provides:  bundled(js-moment)
 Provides:  bundled(js-typeahead.js) = 1.1.1
@@ -249,8 +249,8 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %files client
-%defattr(-,root,root,-)
 %license COPYING
+%doc README.rst
 %{_sysconfdir}/bash_completion.d/bodhi-complete.sh
 %{_bindir}/bodhi
 %{python2_sitelib}/%{name}/client
@@ -265,14 +265,15 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 %files -n python2-bodhi
 %license COPYING
+%doc README.rst
 %dir %{python2_sitelib}/%{name}/
 %{python2_sitelib}/%{name}/__init__.py*
 %{python2_sitelib}/%{name}-%{version}-py%{python2_version}.egg-info
 
 
 %files server
-%defattr(-,root,root,-)
 %license COPYING
+%doc README.rst
 %{_bindir}/bodhi-approve-testing
 %{_bindir}/bodhi-check-policies
 %{_bindir}/bodhi-clean-old-mashes
@@ -293,11 +294,14 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %{_mandir}/man1/initialize_bodhi_db.1*
 %attr(-,bodhi,root) %{_datadir}/%{name}
 %attr(-,bodhi,bodhi) %config(noreplace) %{_sysconfdir}/bodhi/*
-%attr(-,bodhi,root) %{_localstatedir}/log/bodhi
 %attr(0775,bodhi,bodhi) %{_localstatedir}/cache/bodhi
 
 
 %changelog
+* Mon Feb 26 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.4.0-1
+- Update to 3.4.0.
+- https://bodhi.fedoraproject.org/docs/release_notes.html#v3-4-0
+
 * Fri Feb 16 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.3.0-1
 - Update to 3.3.0.
 - https://bodhi.fedoraproject.org/docs/release_notes.html#v3-3-0
