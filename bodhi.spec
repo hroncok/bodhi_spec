@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        3.4.0
+Version:        3.5.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -298,6 +298,10 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Tue Feb 27 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.5.0-1
+- Update to 3.5.0.
+- https://bodhi.fedoraproject.org/docs/release_notes.html#v3-5-0
+
 * Mon Feb 26 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.4.0-1
 - Update to 3.4.0.
 - https://bodhi.fedoraproject.org/docs/release_notes.html#v3-4-0
