@@ -300,19 +300,19 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %changelog
 * Wed Mar 21 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.5.1-1
 - Update to 3.5.1.
-- https://bodhi.fedoraproject.org/docs/release_notes.html#v3-5-1
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-5-1
 
 * Tue Feb 27 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.5.0-1
 - Update to 3.5.0.
-- https://bodhi.fedoraproject.org/docs/release_notes.html#v3-5-0
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-5-0
 
 * Mon Feb 26 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.4.0-1
 - Update to 3.4.0.
-- https://bodhi.fedoraproject.org/docs/release_notes.html#v3-4-0
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-4-0
 
 * Fri Feb 16 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.3.0-1
 - Update to 3.3.0.
-- https://bodhi.fedoraproject.org/docs/release_notes.html#v3-3-0
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-3-0
 
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.2.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
