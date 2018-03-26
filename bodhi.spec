@@ -300,7 +300,7 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %changelog
 * Mon Mar 26 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.5.2-1
 - Update to 3.5.2 (#1560680).
-- https://bodhi.fedoraproject.org/docs/release_notes.html#v3-5-2
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-5-2
 
 * Wed Mar 21 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.5.1-1
 - Update to 3.5.1.
