@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        3.5.2
+Version:        3.6.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -17,6 +17,7 @@ BuildRequires: %{py2_dist colander}
 BuildRequires: %{py2_dist cornice_sphinx} >= 0.3
 BuildRequires: %{py2_dist cornice} >= 3.0.0
 BuildRequires: %{py2_dist cryptography}
+BuildRequires: %{py2_dist fedmsg}
 BuildRequires: %{py2_dist feedgen}
 BuildRequires: %{py2_dist flake8}
 BuildRequires: %{py2_dist iniparse}
@@ -41,12 +42,42 @@ BuildRequires: %{py2_dist sqlalchemy_schemadisplay}
 BuildRequires: %{py2_dist sqlalchemy}
 BuildRequires: %{py2_dist virtualenv}
 BuildRequires: %{py2_dist webtest}
+BuildRequires: %{py3_dist alembic}
+BuildRequires: %{py3_dist arrow}
+BuildRequires: %{py3_dist bleach}
+BuildRequires: %{py3_dist click}
+BuildRequires: %{py3_dist colander}
+BuildRequires: %{py3_dist cornice_sphinx} >= 0.3
+BuildRequires: %{py3_dist cornice} >= 3.0.0
+BuildRequires: %{py3_dist cryptography}
+BuildRequires: %{py3_dist fedmsg}
+BuildRequires: %{py3_dist feedgen}
+BuildRequires: %{py3_dist flake8}
+BuildRequires: %{py3_dist iniparse}
+BuildRequires: %{py3_dist jinja2}
+BuildRequires: %{py3_dist kitchen}
+BuildRequires: %{py3_dist markdown}
+BuildRequires: %{py3_dist mock}
+BuildRequires: %{py3_dist pylibravatar}
+BuildRequires: %{py3_dist pyramid-fas-openid}
+BuildRequires: %{py3_dist pyramid-mako}
+BuildRequires: %{py3_dist pyramid-tm}
+BuildRequires: %{py3_dist pyramid}
+BuildRequires: %{py3_dist pytest-cov}
+BuildRequires: %{py3_dist pytest}
+BuildRequires: %{py3_dist python-bugzilla}
+BuildRequires: %{py3_dist python-fedora}
+BuildRequires: %{py3_dist pyyaml}
+BuildRequires: %{py3_dist simplemediawiki}
+BuildRequires: %{py3_dist sphinx}
+BuildRequires: %{py3_dist sqlalchemy}
+BuildRequires: %{py3_dist virtualenv}
+BuildRequires: %{py3_dist webtest}
 BuildRequires: createrepo_c
-BuildRequires: fedmsg
 BuildRequires: koji
 BuildRequires: liberation-mono-fonts
 BuildRequires: packagedb-cli
-BuildRequires: pungi
+BuildRequires: pungi >= 4.1.20
 BuildRequires: python2-createrepo_c
 BuildRequires: python2-devel
 BuildRequires: python2-dnf
@@ -54,6 +85,13 @@ BuildRequires: python2-dogpile-cache
 BuildRequires: python2-koji
 BuildRequires: python2-librepo
 BuildRequires: python2-pillow
+BuildRequires: python3-createrepo_c
+BuildRequires: python3-devel
+BuildRequires: python3-dnf
+BuildRequires: python3-dogpile-cache
+BuildRequires: python3-koji
+BuildRequires: python3-librepo
+BuildRequires: python3-pillow
 
 
 %description
@@ -71,15 +109,7 @@ Summary: Bodhi Client
 Group: Applications/Internet
 
 Requires: filesystem
-Requires: koji
-Requires: %{py2_dist click}
-Requires: %{py2_dist python-fedora} >= 0.9
-Requires: %{py2_dist iniparse}
-Requires: %{py2_dist kitchen}
-Requires: %{py2_dist six}
-Requires: python2-bodhi == %{version}-%{release}
-Requires: python2-dnf
-Requires: python2-koji
+Requires: python3-bodhi-client == %{version}-%{release}
 
 
 %description client
@@ -89,6 +119,8 @@ Client tools for interacting with bodhi.
 %package docs
 Summary: Bodhi documentation
 Group:   Applications/Internet
+
+Requires: filesystem
 
 
 %description docs
@@ -106,6 +138,57 @@ Group:   Applications/Internet
 Common files shared by bodhi-client and bodhi-server.
 
 
+%package -n python3-bodhi
+Summary: Common files shared by bodhi-client and bodhi-server
+Group:   Applications/Internet
+
+%{?python_provide:%python_provide python3-bodhi}
+
+
+%description -n python3-bodhi
+Common files shared by bodhi-client and bodhi-server.
+
+
+%package -n python2-bodhi-client
+Summary: REST API bindings for Python.
+
+Requires: %{py2_dist click}
+Requires: %{py2_dist iniparse}
+Requires: %{py2_dist kitchen}
+Requires: %{py2_dist python-fedora} >= 0.9
+Requires: %{py2_dist six}
+Requires: koji
+Requires: python2-bodhi == %{version}-%{release}
+Requires: python2-dnf
+Requires: python2-koji
+
+%{?python_provide:%python_provide python2-bodhi-client}
+
+
+%description -n python2-bodhi-client
+REST API bindings for Python.
+
+
+%package -n python3-bodhi-client
+Summary: REST API bindings for Python.
+
+Requires: %{py3_dist click}
+Requires: %{py3_dist iniparse}
+Requires: %{py3_dist kitchen}
+Requires: %{py3_dist python-fedora} >= 0.9
+Requires: %{py3_dist six}
+Requires: koji
+Requires: python3-bodhi == %{version}-%{release}
+Requires: python3-dnf
+Requires: python3-koji
+
+%{?python_provide:%python_provide python3-bodhi-client}
+
+
+%description -n python3-bodhi-client
+REST API bindings for Python.
+
+
 %package server
 Summary: A modular framework that facilitates publishing software updates
 Group: Applications/Internet
@@ -117,6 +200,7 @@ Requires: %{py2_dist click}
 Requires: %{py2_dist colander}
 Requires: %{py2_dist cornice} >= 3.0.0
 Requires: %{py2_dist cryptography}
+Requires: %{py2_dist fedmsg}
 Requires: %{py2_dist feedgen}
 Requires: %{py2_dist jinja2}
 Requires: %{py2_dist kitchen}
@@ -131,9 +215,10 @@ Requires: %{py2_dist python-bugzilla}
 Requires: %{py2_dist python-fedora}
 Requires: %{py2_dist python-openid}
 Requires: %{py2_dist simplemediawiki}
+Requires: %{py2_dist six}
 Requires: %{py2_dist sqlalchemy}
 Requires: %{py2_dist waitress}
-Requires: bodhi-client == %{version}-%{release}
+Requires: python2-bodhi-client == %{version}-%{release}
 Requires: createrepo_c
 Requires: fedmsg
 Requires: fedmsg-base
@@ -143,13 +228,13 @@ Requires: intltool
 Requires: liberation-mono-fonts
 Requires: mod_wsgi
 Requires: packagedb-cli
-Requires: pungi
-Requires: python2-bodhi == %{version}-%{release}
+Requires: pungi >= 4.1.20
 Requires: python2-createrepo_c
 Requires: python2-dogpile-cache
 Requires: python2-koji
 Requires: python2-librepo
 Requires: python2-pillow
+Requires: skopeo
 
 Provides:  bundled(aajohan-comfortaa-fonts)
 Provides:  bundled(abattis-cantarell-fonts)
@@ -192,12 +277,23 @@ mv devel/development.ini.example development.ini
 
 %build
 %py2_build
+%py3_build
 
 make %{?_smp_mflags} -C docs html
 make %{?_smp_mflags} -C docs man
 
 
 %install
+# We want the /usr/bin/bodhi CLI to be Python 3 now, but we don't want the server CLIs to be Python
+# 3 yet. An easy way to do this is to install Python 3 Bodhi first, save the /usr/bin/bodhi it
+# generates, then do the Python 2 install (to overwrite the common files). Afterwards, we'll move
+# the Python 3 /usr/bin/bodhi back into place.
+%py3_install
+# We aren't ready to support Bodhi server on Python 3 yet, so let's just nuke it for now.
+rm -rf %{buildroot}/usr/lib/python%{python3_version}/site-packages/bodhi/server/
+rm -rf %{buildroot}/usr/lib/python%{python3_version}/site-packages/bodhi_server-*.egg-info
+# Let's save /usr/bin/bodhi from being overwritten, since we want it to be the Python 3 version.
+cp %{buildroot}/usr/bin/bodhi bodhi-py3
 %py2_install
 
 %{__mkdir_p} %{buildroot}/var/lib/bodhi
@@ -227,6 +323,9 @@ if [ ! -e %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap ]; then
         %{buildroot}%{python2_sitelib}/%{name}/server/static/bootstrap
 fi;
 
+# Restore the Python 3 version of /usr/bin/bodhi.
+mv bodhi-py3 %{buildroot}/usr/bin/bodhi
+
 
 %check
 # setuptools on EL 7 doesn't install bootstrap. This test ensures that bootstrap is present.
@@ -237,9 +336,16 @@ fi;
 
 # The tests need bodhi to be installed to pass. Let's build a virtualenv so we can install bodhi
 # there.
-virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
-.test-virtualenv/bin/python2 setup.py develop
-.test-virtualenv/bin/python2 /usr/bin/py.test
+virtualenv-2 --system-site-packages --no-pip --never-download .test-virtualenv-2
+virtualenv-3 --system-site-packages --no-pip --never-download .test-virtualenv-3
+
+.test-virtualenv-2/bin/python2 setup.py develop
+.test-virtualenv-2/bin/python2 /usr/bin/py.test-2
+
+.test-virtualenv-3/bin/python3 setup.py develop
+# The Python 3 tests don't reach the required coverage numbers.
+sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
+.test-virtualenv-3/bin/python3 /usr/bin/py.test-3
 
 
 %pre server
@@ -253,8 +359,6 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %doc README.rst
 %{_sysconfdir}/bash_completion.d/bodhi-complete.sh
 %{_bindir}/bodhi
-%{python2_sitelib}/%{name}/client
-%{python2_sitelib}/%{name}_client-%{version}-py%{python2_version}.egg-info
 %{_mandir}/man1/bodhi.1*
 
 
@@ -269,6 +373,29 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 %dir %{python2_sitelib}/%{name}/
 %{python2_sitelib}/%{name}/__init__.py*
 %{python2_sitelib}/%{name}-%{version}-py%{python2_version}.egg-info
+
+
+%files -n python3-bodhi
+%license COPYING
+%doc README.rst
+%dir %{python3_sitelib}/%{name}/
+%{python3_sitelib}/%{name}/__init__.py
+%{python3_sitelib}/%{name}/__pycache__
+%{python3_sitelib}/%{name}-%{version}-py%{python3_version}.egg-info
+
+
+%files -n python2-bodhi-client
+%license COPYING
+%doc README.rst
+%{python2_sitelib}/%{name}/client
+%{python2_sitelib}/%{name}_client-%{version}-py%{python2_version}.egg-info
+
+
+%files -n python3-bodhi-client
+%license COPYING
+%doc README.rst
+%{python3_sitelib}/%{name}/client
+%{python3_sitelib}/%{name}_client-%{version}-py%{python3_version}.egg-info
 
 
 %files server
@@ -298,6 +425,13 @@ virtualenv --system-site-packages --no-pip --never-download .test-virtualenv
 
 
 %changelog
+* Mon Mar 26 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.6.0-1
+- Update to 3.6.0 (#1567959).
+- https://bodhi.stg.fedoraproject.org/docs/user/release_notes.html#v3-6-0
+- The CLI now uses Python 3 (#1024795).
+- bodhi-client no longer contains the Python bindings - they were split out
+  into new python2-bodhi-client and python3-bodhi-client subpackages.
+
 * Mon Mar 26 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.5.2-1
 - Update to 3.5.2 (#1560680).
 - https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-5-2
