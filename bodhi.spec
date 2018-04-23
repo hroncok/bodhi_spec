@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        3.6.0
+Version:        3.6.1
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -73,7 +73,6 @@ BuildRequires: %{py3_dist sphinx}
 BuildRequires: %{py3_dist sqlalchemy}
 BuildRequires: %{py3_dist virtualenv}
 BuildRequires: %{py3_dist webtest}
-BuildRequires: createrepo_c
 BuildRequires: koji
 BuildRequires: liberation-mono-fonts
 BuildRequires: packagedb-cli
@@ -114,6 +113,21 @@ Requires: python3-bodhi-client == %{version}-%{release}
 
 %description client
 Client tools for interacting with bodhi.
+
+
+%package composer
+Summary: Bodhi composer backend
+
+Requires: %{py2_dist jinja2}
+Requires: bodhi-server == %{version}-%{release}
+Requires: pungi >= 4.1.20
+Requires: python2-createrepo_c
+Requires: skopeo
+
+
+%description composer
+The Bodhi composer is the component that publishes Bodhi artifacts to
+repositories.
 
 
 %package docs
@@ -202,7 +216,6 @@ Requires: %{py2_dist cornice} >= 3.0.0
 Requires: %{py2_dist cryptography}
 Requires: %{py2_dist fedmsg}
 Requires: %{py2_dist feedgen}
-Requires: %{py2_dist jinja2}
 Requires: %{py2_dist kitchen}
 Requires: %{py2_dist markdown}
 Requires: %{py2_dist psycopg2}
@@ -219,7 +232,6 @@ Requires: %{py2_dist six}
 Requires: %{py2_dist sqlalchemy}
 Requires: %{py2_dist waitress}
 Requires: python2-bodhi-client == %{version}-%{release}
-Requires: createrepo_c
 Requires: fedmsg
 Requires: fedmsg-base
 Requires: git
@@ -228,13 +240,10 @@ Requires: intltool
 Requires: liberation-mono-fonts
 Requires: mod_wsgi
 Requires: packagedb-cli
-Requires: pungi >= 4.1.20
-Requires: python2-createrepo_c
 Requires: python2-dogpile-cache
 Requires: python2-koji
 Requires: python2-librepo
 Requires: python2-pillow
-Requires: skopeo
 
 Provides:  bundled(aajohan-comfortaa-fonts)
 Provides:  bundled(abattis-cantarell-fonts)
@@ -362,6 +371,13 @@ sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
 %{_mandir}/man1/bodhi.1*
 
 
+%files composer
+%license COPYING
+%doc README.rst
+%{python2_sitelib}/%{name}/server/consumers/masher.py*
+%{python2_sitelib}/%{name}/server/metadata.py*
+
+
 %files docs
 %license COPYING
 %doc docs/_build/html/ README.rst
@@ -422,9 +438,18 @@ sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
 %attr(-,bodhi,root) %{_datadir}/%{name}
 %attr(-,bodhi,bodhi) %config(noreplace) %{_sysconfdir}/bodhi/*
 %attr(0775,bodhi,bodhi) %{_localstatedir}/cache/bodhi
+# These excluded files are in the bodhi-consumers package so don't include them here.
+%exclude %{python2_sitelib}/%{name}/server/consumers/masher.py*
+%exclude %{python2_sitelib}/%{name}/server/metadata.py*
 
 
 %changelog
+* Mon Apr 23 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.6.1-1
+- Update to 3.6.1 (#1570947).
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-6-1
+- bodhi-server no longer provides the composer (masher.py). It is now provided
+  by a separate bodhi-composer subpackage.
+
 * Mon Mar 26 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.6.0-1
 - Update to 3.6.0 (#1567959).
 - https://bodhi.stg.fedoraproject.org/docs/user/release_notes.html#v3-6-0
