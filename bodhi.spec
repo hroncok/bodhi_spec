@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        3.7.0
+Version:        3.8.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -444,6 +444,10 @@ sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
 
 
 %changelog
+* Wed May 16 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.8.0-1
+- Update to 3.8.0 (#1582628).
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-8-0
+
 * Tue May 08 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.7.0-1
 - Update to 3.7.0.
 - https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-7-0
