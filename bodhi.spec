@@ -1,6 +1,6 @@
 Name:           bodhi
 Version:        3.8.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -444,6 +444,9 @@ sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
 
 
 %changelog
+* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 3.8.1-2
+- Rebuilt for Python 3.7
+
 * Tue Jun 12 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.8.1-1
 - Update to 3.8.1.
 - Fix a Python 3.7 FTBFS (#1589990).
