@@ -1,6 +1,9 @@
+%global bashcompdir     %(pkg-config --variable=completionsdir bash-completion 2>/dev/null)
+%global bashcomproot    %(dirname %{bashcompdir} 2>/dev/null)
+
 Name:           bodhi
 Version:        3.10.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -77,6 +80,7 @@ BuildRequires: /usr/bin/virtualenv
 BuildRequires: koji
 BuildRequires: liberation-mono-fonts
 BuildRequires: packagedb-cli
+BuildRequires: pkgconfig(bash-completion)
 BuildRequires: pungi >= 4.1.20
 BuildRequires: python2-createrepo_c
 BuildRequires: python2-devel
@@ -108,7 +112,6 @@ A modular piece of the Fedora Infrastructure stack
 Summary: Bodhi Client
 Group: Applications/Internet
 
-Requires: filesystem
 Requires: python3-bodhi-client == %{version}-%{release}
 
 
@@ -309,14 +312,13 @@ cp %{buildroot}/usr/bin/bodhi bodhi-py3
 
 %{__mkdir_p} %{buildroot}/var/lib/bodhi
 %{__mkdir_p} %{buildroot}/var/cache/bodhi
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/bash_completion.d
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/httpd/conf.d
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/fedmsg.d
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/bodhi
 %{__mkdir_p} %{buildroot}%{_datadir}/%{name}
 %{__mkdir_p} -m 0755 %{buildroot}/%{_localstatedir}/log/bodhi
 
-%{__install} -m 0755 bodhi-complete.sh %{buildroot}%{_sysconfdir}/bash_completion.d
+%{__install} -Dpm 0755 bodhi-complete.sh %{buildroot}%{bashcompdir}/%{name}
 %{__install} -m 644 apache/%{name}.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 %{__install} -m 640 production.ini %{buildroot}%{_sysconfdir}/%{name}/production.ini
 %{__install} -m 640 alembic.ini %{buildroot}%{_sysconfdir}/%{name}/alembic.ini
@@ -366,7 +368,7 @@ virtualenv --python=%{__python3} --system-site-packages --no-pip --never-downloa
 %files client
 %license COPYING
 %doc README.rst
-%{_sysconfdir}/bash_completion.d/bodhi-complete.sh
+%{bashcomproot}
 %{_bindir}/bodhi
 %{_mandir}/man1/bodhi.1*
 
@@ -445,6 +447,9 @@ virtualenv --python=%{__python3} --system-site-packages --no-pip --never-downloa
 
 
 %changelog
+* Wed Sep 19 2018 Todd Zullinger <tmz@pobox.com> - 3.10.0-2
+- Use recommended directory for bash-completion file
+
 * Mon Sep 17 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.10.0-1
 - Update to 3.10.0.
 - https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-10-0

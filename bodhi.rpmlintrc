@@ -4,7 +4,6 @@ from Config import addFilter
 addFilter('explicit-lib-dependency liberation-mono-fonts')
 addFilter('hidden-file-or-dir /usr/lib/python2.7/site-packages/bodhi/server/locale/.placeholder')
 addFilter('hidden-file-or-dir /usr/share/doc/bodhi-docs/html/.buildinfo')
-addFilter('non-conffile-in-etc /etc/bash_completion.d/bodhi-complete.sh')
 # These two files contain secrets
 addFilter('non-readable /etc/bodhi/alembic.ini')
 addFilter('non-readable /etc/bodhi/production.ini')
