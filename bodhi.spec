@@ -1,6 +1,6 @@
 Name:           bodhi
-Version:        3.8.1
-Release:        3%{?dist}
+Version:        3.9.0
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -15,7 +15,7 @@ BuildRequires: %{py2_dist bleach}
 BuildRequires: %{py2_dist click}
 BuildRequires: %{py2_dist colander}
 BuildRequires: %{py2_dist cornice_sphinx} >= 0.3
-BuildRequires: %{py2_dist cornice} >= 3.0.0
+BuildRequires: %{py2_dist cornice} >= 3.1.0
 BuildRequires: %{py2_dist cryptography}
 BuildRequires: %{py2_dist fedmsg}
 BuildRequires: %{py2_dist feedgen}
@@ -48,7 +48,7 @@ BuildRequires: %{py3_dist bleach}
 BuildRequires: %{py3_dist click}
 BuildRequires: %{py3_dist colander}
 BuildRequires: %{py3_dist cornice_sphinx} >= 0.3
-BuildRequires: %{py3_dist cornice} >= 3.0.0
+BuildRequires: %{py3_dist cornice} >= 3.1.0
 BuildRequires: %{py3_dist cryptography}
 BuildRequires: %{py3_dist fedmsg}
 BuildRequires: %{py3_dist feedgen}
@@ -212,7 +212,7 @@ Requires: %{py2_dist arrow}
 Requires: %{py2_dist bleach}
 Requires: %{py2_dist click}
 Requires: %{py2_dist colander}
-Requires: %{py2_dist cornice} >= 3.0.0
+Requires: %{py2_dist cornice} >= 3.1.0
 Requires: %{py2_dist cryptography}
 Requires: %{py2_dist fedmsg}
 Requires: %{py2_dist feedgen}
@@ -444,6 +444,11 @@ sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
 
 
 %changelog
+* Wed Aug 22 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.9.0-1
+- Update to 3.9.0.
+- Fix FTBFS (#1603504).
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-9-0
+
 * Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.8.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
