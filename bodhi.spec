@@ -40,7 +40,6 @@ BuildRequires: %{py2_dist simplemediawiki}
 BuildRequires: %{py2_dist sphinx}
 BuildRequires: %{py2_dist sqlalchemy_schemadisplay}
 BuildRequires: %{py2_dist sqlalchemy}
-BuildRequires: %{py2_dist virtualenv}
 BuildRequires: %{py2_dist webtest}
 BuildRequires: %{py3_dist alembic}
 BuildRequires: %{py3_dist arrow}
@@ -71,8 +70,8 @@ BuildRequires: %{py3_dist pyyaml}
 BuildRequires: %{py3_dist simplemediawiki}
 BuildRequires: %{py3_dist sphinx}
 BuildRequires: %{py3_dist sqlalchemy}
-BuildRequires: %{py3_dist virtualenv}
 BuildRequires: %{py3_dist webtest}
+BuildRequires: /usr/bin/virtualenv
 BuildRequires: koji
 BuildRequires: liberation-mono-fonts
 BuildRequires: packagedb-cli
@@ -345,8 +344,8 @@ fi;
 
 # The tests need bodhi to be installed to pass. Let's build a virtualenv so we can install bodhi
 # there.
-virtualenv-2 --system-site-packages --no-pip --never-download .test-virtualenv-2
-virtualenv-3 --system-site-packages --no-pip --never-download .test-virtualenv-3
+virtualenv --python=%{__python2} --system-site-packages --no-pip --never-download .test-virtualenv-2
+virtualenv --python=%{__python3} --system-site-packages --no-pip --never-download .test-virtualenv-3
 
 .test-virtualenv-2/bin/python2 setup.py develop
 .test-virtualenv-2/bin/python2 /usr/bin/py.test-2
