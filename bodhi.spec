@@ -1,5 +1,5 @@
 Name:           bodhi
-Version:        3.9.0
+Version:        3.10.0
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -36,6 +36,7 @@ BuildRequires: %{py2_dist python-bugzilla}
 BuildRequires: %{py2_dist python-fedora}
 BuildRequires: %{py2_dist python-openid}
 BuildRequires: %{py2_dist pyyaml}
+BuildRequires: %{py2_dist responses}
 BuildRequires: %{py2_dist simplemediawiki}
 BuildRequires: %{py2_dist sphinx}
 BuildRequires: %{py2_dist sqlalchemy_schemadisplay}
@@ -67,6 +68,7 @@ BuildRequires: %{py3_dist pytest}
 BuildRequires: %{py3_dist python-bugzilla}
 BuildRequires: %{py3_dist python-fedora}
 BuildRequires: %{py3_dist pyyaml}
+BuildRequires: %{py3_dist responses}
 BuildRequires: %{py3_dist simplemediawiki}
 BuildRequires: %{py3_dist sphinx}
 BuildRequires: %{py3_dist sqlalchemy}
@@ -121,6 +123,7 @@ Requires: %{py2_dist jinja2}
 Requires: bodhi-server == %{version}-%{release}
 Requires: pungi >= 4.1.20
 Requires: python2-createrepo_c
+Requires: python2-hawkey
 Requires: skopeo
 
 
@@ -351,8 +354,6 @@ virtualenv --python=%{__python3} --system-site-packages --no-pip --never-downloa
 .test-virtualenv-2/bin/python2 /usr/bin/py.test-2
 
 .test-virtualenv-3/bin/python3 setup.py develop
-# The Python 3 tests don't reach the required coverage numbers.
-sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
 .test-virtualenv-3/bin/python3 /usr/bin/py.test-3
 
 
@@ -424,6 +425,7 @@ sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
 %{_bindir}/bodhi-manage-releases
 %{_bindir}/bodhi-monitor-composes
 %{_bindir}/bodhi-push
+%{_bindir}/bodhi-skopeo-lite
 %{_bindir}/bodhi-untag-branched
 %{_bindir}/initialize_bodhi_db
 %config(noreplace) %{_sysconfdir}/bodhi/alembic.ini
@@ -443,6 +445,10 @@ sed -i "s/fail_under.*/fail_under = 78/" .coveragerc
 
 
 %changelog
+* Mon Sep 17 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.10.0-1
+- Update to 3.10.0.
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-10-0
+
 * Wed Aug 22 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.9.0-1
 - Update to 3.9.0.
 - Fix FTBFS (#1603504).
