@@ -2,8 +2,8 @@
 %global bashcomproot    %(dirname %{bashcompdir} 2>/dev/null)
 
 Name:           bodhi
-Version:        3.10.0
-Release:        2%{?dist}
+Version:        3.10.1
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -447,6 +447,10 @@ virtualenv --python=%{__python3} --system-site-packages --no-pip --never-downloa
 
 
 %changelog
+* Tue Oct 09 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.10.1-1
+- Update to 3.10.1.
+- https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-10-1
+
 * Wed Sep 19 2018 Todd Zullinger <tmz@pobox.com> - 3.10.0-2
 - Use recommended directory for bash-completion file
 
