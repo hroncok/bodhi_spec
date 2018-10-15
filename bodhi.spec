@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        3.10.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -11,6 +11,11 @@ Summary:        A modular framework that facilitates publishing software updates
 Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+
+# Patch 0 and 1 both come from https://github.com/fedora-infra/bodhi/pull/2620 and correct Bodhi to
+# work with click >= 7.0.0.
+Patch0:         0000-Explicitly-name-the-skopeo-lite-src-dest_creds-param.patch
+Patch1:         0001-Adjust-two-unit-tests-to-work-with-Click-6-and-7.patch
 
 BuildRequires: %{py2_dist alembic}
 BuildRequires: %{py2_dist arrow}
@@ -447,6 +452,9 @@ virtualenv --python=%{__python3} --system-site-packages --no-pip --never-downloa
 
 
 %changelog
+* Mon Oct 15 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.10.1-2
+- Backport some patches for compatibility with click-7.0.0.
+
 * Tue Oct 09 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.10.1-1
 - Update to 3.10.1.
 - https://bodhi.fedoraproject.org/docs/user/release_notes.html#v3-10-1
