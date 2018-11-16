@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        3.11.0
-Release:        1%{?dist}
+Release:        3%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -405,6 +405,9 @@ rm .coveragerc
 
 
 %changelog
+* Fri Nov 16 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.11.0-3
+- Bump the release to 3 so that f29-infra has a newer version than f29.
+
 * Fri Nov 16 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.11.0-1
 - Update to 3.11.0.
 - Switch bodhi-server to use Python 3 (#1631858).
