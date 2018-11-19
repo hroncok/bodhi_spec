@@ -3,7 +3,6 @@ product_versions:
   - fedora-*
 decision_context: bodhi_update_push_testing
 rules:
-  - !PassingTestCaseRule {test_case_name: dist.depcheck}
   - !PassingTestCaseRule {test_case_name: dist.abicheck}
   - !PassingTestCaseRule {test_case_name: dist.rpmdeplint}
 --- !Policy
@@ -11,6 +10,5 @@ product_versions:
   - fedora-*
 decision_context: bodhi_update_push_stable
 rules:
-  - !PassingTestCaseRule {test_case_name: dist.depcheck}
   - !PassingTestCaseRule {test_case_name: dist.abicheck}
   - !PassingTestCaseRule {test_case_name: dist.rpmdeplint}
