@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        3.11.1
-Release:        1%{?dist}
+Release:        100%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -405,7 +405,7 @@ rm .coveragerc
 
 
 %changelog
-* Tue Nov 27 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.11.1-1
+* Tue Nov 27 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.11.1-100
 - Update to 3.11.1.
 
 * Fri Nov 16 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.11.0-3
