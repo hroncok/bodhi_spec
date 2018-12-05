@@ -2,7 +2,7 @@
 %global bashcomproot    %(dirname %{bashcompdir} 2>/dev/null)
 
 Name:           bodhi
-Version:        3.11.2
+Version:        3.11.3
 Release:        100%{?dist}
 BuildArch:      noarch
 
@@ -405,6 +405,10 @@ rm .coveragerc
 
 
 %changelog
+* Wed Dec 05 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.11.3-100
+- Update to 3.11.3.
+- https://github.com/fedora-infra/bodhi/releases/tag/3.11.3
+
 * Mon Dec 03 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.11.2-100
 - Update to 3.11.2.
 - https://github.com/fedora-infra/bodhi/releases/tag/3.11.2
