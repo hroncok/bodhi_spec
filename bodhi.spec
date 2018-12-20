@@ -70,9 +70,12 @@ Bodhi is a web application that facilitates the process of publishing
 updates for a software distribution.
 
 A modular piece of the Fedora Infrastructure stack
-* Utilizes the Koji Buildsystem for tracking RPMs
-* Creates the update repositories using Mash, which composes a repository based
+* Utilizes the Koji Buildsystem for tracking packages.
+* Creates RPM and module update repositories using Pungi, which composes a repository based
   on tagged builds in Koji.
+* Manages container and Flatpak updates using skopeo or bodhi-skopeo-lite (included with the
+  bodhi-server package).
+* Manages RPM, container, module, and Flatpak content.
 
 
 %package client
