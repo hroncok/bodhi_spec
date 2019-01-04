@@ -143,7 +143,6 @@ Summary: REST API bindings for Python.
 
 Requires: %{py2_dist click}
 Requires: %{py2_dist iniparse}
-Requires: %{py2_dist kitchen}
 Requires: %{py2_dist python-fedora} >= 0.9
 Requires: %{py2_dist six}
 Requires: koji
@@ -163,7 +162,6 @@ Summary: REST API bindings for Python.
 
 Requires: %{py3_dist click}
 Requires: %{py3_dist iniparse}
-Requires: %{py3_dist kitchen}
 Requires: %{py3_dist python-fedora} >= 0.9
 Requires: %{py3_dist six}
 Requires: /usr/bin/koji
