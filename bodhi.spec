@@ -203,6 +203,10 @@ updates for a software distribution.
 %prep
 %autosetup -p1 -n bodhi-%{version}
 
+# Temporarily hack the year in tests before the proper fix
+# https://github.com/fedora-infra/bodhi/pull/2891
+find bodhi/tests -name '*.py' -exec sed -i "s/2018/$(date +%Y)/g" {} +
+
 # Kill some dev deps
 sed -i '/pyramid_debugtoolbar/d' setup.py
 sed -i '/pyramid_debugtoolbar/d' devel/development.ini.example
