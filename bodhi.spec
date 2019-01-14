@@ -3,7 +3,7 @@
 
 Name:           bodhi
 Version:        3.12.0
-Release:        100%{?dist}
+Release:        101%{?dist}
 BuildArch:      noarch
 
 License:        GPLv2+
@@ -12,13 +12,6 @@ Group:          Applications/Internet
 URL:            https://github.com/fedora-infra/bodhi
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires: %{py2_dist click}
-BuildRequires: %{py2_dist iniparse}
-BuildRequires: %{py2_dist mock}
-BuildRequires: %{py2_dist munch}
-BuildRequires: %{py2_dist pytest-cov}
-BuildRequires: %{py2_dist pytest}
-BuildRequires: %{py2_dist python-fedora} >= 0.9
 BuildRequires: %{py3_dist alembic}
 BuildRequires: %{py3_dist arrow}
 BuildRequires: %{py3_dist bleach}
@@ -50,12 +43,9 @@ BuildRequires: %{py3_dist sphinx}
 BuildRequires: %{py3_dist sqlalchemy}
 BuildRequires: %{py3_dist sqlalchemy_schemadisplay}
 BuildRequires: %{py3_dist webtest}
-BuildRequires: /usr/bin/virtualenv
 BuildRequires: liberation-mono-fonts
 BuildRequires: pkgconfig(bash-completion)
 BuildRequires: pungi >= 4.1.20
-BuildRequires: python2-devel
-BuildRequires: python2-koji
 BuildRequires: python3-createrepo_c
 BuildRequires: python3-devel
 BuildRequires: python3-dnf
@@ -116,17 +106,6 @@ Requires: filesystem
 Bodhi documentation.
 
 
-%package -n python2-bodhi
-Summary: Common files shared by bodhi-client and bodhi-server
-Group:   Applications/Internet
-
-%{?python_provide:%python_provide python2-bodhi}
-
-
-%description -n python2-bodhi
-Common files shared by bodhi-client and bodhi-server.
-
-
 %package -n python3-bodhi
 Summary: Common files shared by bodhi-client and bodhi-server
 Group:   Applications/Internet
@@ -136,25 +115,6 @@ Group:   Applications/Internet
 
 %description -n python3-bodhi
 Common files shared by bodhi-client and bodhi-server.
-
-
-%package -n python2-bodhi-client
-Summary: REST API bindings for Python.
-
-Requires: %{py2_dist click}
-Requires: %{py2_dist iniparse}
-Requires: %{py2_dist python-fedora} >= 0.9
-Requires: %{py2_dist six}
-Requires: koji
-Requires: python2-bodhi == %{version}-%{release}
-Requires: python2-dnf
-Requires: python2-koji
-
-%{?python_provide:%python_provide python2-bodhi-client}
-
-
-%description -n python2-bodhi-client
-REST API bindings for Python.
 
 
 %package -n python3-bodhi-client
@@ -255,12 +215,6 @@ mv devel/development.ini.example development.ini
 
 
 %build
-# We don't want the Python 2 build to see the server requirements, and this is an easy way to do
-# that.
-mv requirements.txt py3-requirements.txt
-touch requirements.txt
-%py2_build
-mv py3-requirements.txt requirements.txt
 %py3_build
 
 make %{?_smp_mflags} -C docs html
@@ -268,10 +222,6 @@ make %{?_smp_mflags} -C docs man
 
 
 %install
-%py2_install
-# Let's remove all the server stuff since we don't ship Python 2 version of the server anymore.
-rm -rf %{buildroot}/%{python2_sitelib}/%{name}_server-%{version}-py%{python2_version}.egg-info
-rm -rf %{buildroot}/%{python2_sitelib}/%{name}/server
 %py3_install
 
 %{__mkdir_p} %{buildroot}/var/lib/bodhi
@@ -296,20 +246,12 @@ install -pm0644 docs/_build/man/*.1 %{buildroot}%{_mandir}/man1/
 
 
 %check
-# The tests need bodhi to be installed to pass. Let's build a virtualenv so we can install bodhi
+# The tests need bodhi to be installed to pass. Let's build a venv so we can install bodhi
 # there.
-virtualenv --python=%{__python2} --system-site-packages --no-pip --never-download .test-virtualenv-2
-virtualenv --python=%{__python3} --system-site-packages --no-pip --never-download .test-virtualenv-3
+%{__python3} -m venv --system-site-packages --without-pip .test-venv
 
-.test-virtualenv-3/bin/python3 setup.py develop
-.test-virtualenv-3/bin/python3 /usr/bin/py.test-3
-
-# We don't support the server on Python 2, so we can kill its tests.
-rm -rf bodhi/tests/server
-# Since we just killed most of the tests, coverage will fail, so let's just not configure it to be
-# required.
-rm .coveragerc
-.test-virtualenv-2/bin/python2 /usr/bin/py.test-2
+.test-venv/bin/python3 setup.py develop
+.test-venv/bin/python3 /usr/bin/py.test-3
 
 
 %pre server
@@ -341,14 +283,6 @@ rm .coveragerc
 %doc docs/_build/html/ README.rst
 
 
-%files -n python2-bodhi
-%license COPYING
-%doc README.rst
-%dir %{python2_sitelib}/%{name}/
-%{python2_sitelib}/%{name}/__init__.py*
-%{python2_sitelib}/%{name}-%{version}-py%{python2_version}.egg-info
-
-
 %files -n python3-bodhi
 %license COPYING
 %doc README.rst
@@ -356,13 +290,6 @@ rm .coveragerc
 %{python3_sitelib}/%{name}/__init__.py
 %{python3_sitelib}/%{name}/__pycache__
 %{python3_sitelib}/%{name}-%{version}-py%{python3_version}.egg-info
-
-
-%files -n python2-bodhi-client
-%license COPYING
-%doc README.rst
-%{python2_sitelib}/%{name}/client
-%{python2_sitelib}/%{name}_client-%{version}-py%{python2_version}.egg-info
 
 
 %files -n python3-bodhi-client
@@ -406,6 +333,9 @@ rm .coveragerc
 
 
 %changelog
+* Mon Jan 14 2019 Miro Hrončok <mhroncok@redhat.com> - 3.12.0-101
+- Drop Python 2 subpackage (#1631858)
+
 * Mon Dec 17 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 3.12.0-100
 - Upgrade to 3.12.0.
 - https://github.com/fedora-infra/bodhi/releases/tag/3.12.0
